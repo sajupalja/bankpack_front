@@ -27,19 +27,56 @@
     </div>
 
     <!-- navigation drawer -->
-    <v-navigation-drawer 
+    <v-navigation-drawer
       v-model="drawer"
       fixed
       temporary
       right
     >
-      <v-list-item 
+      <div
+        class="drawer-header"
+        v-if="!isLoggedIn"
+      >
+        <router-link
+          class="login-btn"
+          :to="{ name: 'Login' }"
+        >로그인하기</router-link>
+      </div>
+
+      <div
+        class="drawer-header"
+        v-else
+      >
+        {{ username }}님
+      </div>
+
+      <v-divider></v-divider>
+
+      <div
+        v-for="item in navigationItems"
+        :key="item.title"
+      >
+        <router-link
+          :to="{ name: item.route }"
+          class="navigation-list-item"
+        >
+          <v-list-item-icon>
+            <v-icon class="navigation-list-icon">{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </router-link>
+      </div>
+
+      <!-- <v-list-item
         v-if="!isLoggedIn"
         :to="{ name: 'Login' }"
         link
       >
         <v-list-item-content>
-          <v-list-item-title class="text-h6">
+          <v-list-item-title class="nav-drawer-title">
             로그인하기
           </v-list-item-title>
         </v-list-item-content>
@@ -47,7 +84,7 @@
 
       <v-list-item v-else>
         <v-list-item-content>
-          <v-list-item-title class="text-h6">
+          <v-list-item-title class="nav-drawer-title">
             {{ username }}님
           </v-list-item-title>
           <v-list-item-subtitle>
@@ -76,7 +113,7 @@
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </v-list>
+      </v-list> -->
     </v-navigation-drawer>
 
     <router-view/>
@@ -160,6 +197,42 @@ export default {
 .logo-img {
   height: 7vh;
   margin-left: 7vw;
+}
+
+.drawer-header {
+  padding: 1.6rem 1.6rem;
+}
+
+.login-btn {
+  text-decoration: none;
+  color: var(--font);
+}
+
+.login-btn:hover {
+  cursor: pointer;
+}
+
+.login-btn:active {
+  color: var(--background);
+}
+
+.navigation-list-item {
+  text-decoration: none;
+  color: var(--font);
+  display: flex;
+  padding-left: 1rem;
+}
+
+.navigation-list-item:hover {
+  cursor: pointer;
+}
+
+.navigation-list-item:active {
+  background-color: var(--background);
+}
+
+.navigation-list-icon {
+  margin-right: 1rem;
 }
 
 @media screen and (max-width: 600px) {

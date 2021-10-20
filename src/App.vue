@@ -1,31 +1,51 @@
 <template>
   <div id="app">
 
+    <!-- smoke screen for screens wider than 600px -->
+    <div class="smoke-screen">
+      <img
+        class="smoke-screen-logo"
+        src="./assets/icon.png"
+      >
+      <h3>뱅팩은 모바일에 최적화된 서비스입니다.</h3>
+      <h5>모바일 크기 화면에서 봐주세요!</h5>
+    </div>
+
     <!-- header -->
     <div class="navbar">
-      <v-img
+      <div></div>
+      <img
         class="logo-img"
         src="./assets/icon.png"
-        contain
       >
-      </v-img>
-
       <v-btn
-       @click="drawer = true"
-       icon
+        @click="drawer = !drawer"
+        icon
       >
         <v-icon>mdi-menu</v-icon>
       </v-btn>
     </div>
 
     <!-- navigation drawer -->
-    <v-navigation-drawer
+    <v-navigation-drawer 
       v-model="drawer"
       fixed
       temporary
       right
     >
-      <v-list-item>
+      <v-list-item 
+        v-if="!isLoggedIn"
+        :to="{ name: 'Login' }"
+        link
+      >
+        <v-list-item-content>
+          <v-list-item-title class="text-h6">
+            로그인하기
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item v-else>
         <v-list-item-content>
           <v-list-item-title class="text-h6">
             {{ username }}님
@@ -104,15 +124,38 @@ export default {
 </style>
 
 <style scoped>
+.smoke-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  z-index: 9999;
+}
+
+.smoke-screen-logo {
+  width: 200px;
+}
+
 .navbar {
   height: 8vh;
-  width: 100vw;
+	position: sticky;
+	top: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+  background-color: white;
 }
 
 .logo-img {
   height: 7vh;
+  margin-left: 7vw;
+}
+
+@media screen and (max-width: 600px) {
+  .smoke-screen {
+    display: none;
+  }
 }
 </style>

@@ -89,7 +89,7 @@ export default {
         }, {
           title: '후기 검색', icon: 'mdi-forum-outline', route: 'Home',
         }, {
-          title: 'My 여행', icon: 'mdi-bag-carry-on', route: 'Home',
+          title: 'My 여행', icon: 'mdi-bag-carry-on', route: 'MyTripList',
         }, {
           title: 'My 자산', icon: 'mdi-cash', route: 'Home',
         },

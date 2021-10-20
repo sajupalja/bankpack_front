@@ -79,7 +79,7 @@ export default {
         }, {
           title: 'My 여행', icon: 'mdi-bag-carry-on', route: 'Home',
         }, {
-          title: 'My 자산', icon: 'mdi-cash', route: 'Home',
+          title: 'My 자산', icon: 'mdi-cash', route: 'Assets',
         },
       ],
       username: '신채원',

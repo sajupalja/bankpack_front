@@ -1,16 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: bankpack-svc
+  name: bankpack
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
   tls:
   - secretName: tls-secret
   rules:
-  - http:
+  - host: bankpack.169.56.174.130.nip.io
+    http:
       paths:
-      - path: /bankpack
+      - path: /
         pathType: Prefix
         backend:
           service:

@@ -89,6 +89,7 @@ export default {
   data() {
     return {
       drawer: false,
+      isLoggedIn: false,
       navigationItems: [
         {
           title: '홈', icon: 'mdi-home', route: 'Home',
@@ -112,12 +113,20 @@ export default {
 <style>
 @import './assets/css/style.css';
 @font-face {
+    font-family: 'paybooc-Medium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Medium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
     font-family: 'paybooc-Bold';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
 #app {
-  font-family: 'paybooc-Bold';
+  font-family: 'paybooc-Medium';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -139,8 +148,8 @@ export default {
 
 .navbar {
   height: 8vh;
-	position: sticky;
-	top: 0;
+  position: sticky;
+  top: 0;
   display: flex;
   flex-direction: row;
   align-items: center;

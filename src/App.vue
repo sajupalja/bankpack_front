@@ -1,6 +1,7 @@
 <template>
   <div id="app">
 
+    <!-- smoke screen for screens wider than 600px -->
     <div class="smoke-screen">
       <img
         class="smoke-screen-logo"
@@ -12,16 +13,14 @@
 
     <!-- header -->
     <div class="navbar">
-      <v-img
+      <div></div>
+      <img
         class="logo-img"
         src="./assets/icon.png"
-        contain
       >
-      </v-img>
-
       <v-btn
-       @click="drawer = true"
-       icon
+        @click="drawer = !drawer"
+        icon
       >
         <v-icon>mdi-menu</v-icon>
       </v-btn>
@@ -135,14 +134,18 @@ export default {
 
 .navbar {
   height: 8vh;
-  width: 100vw;
+	position: sticky;
+	top: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+  background-color: white;
 }
 
 .logo-img {
   height: 7vh;
+  margin-left: 7vw;
 }
 
 @media screen and (max-width: 600px) {

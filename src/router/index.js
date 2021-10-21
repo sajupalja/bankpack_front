@@ -21,6 +21,10 @@ const routes = [
     path: '/my-trips',
     name: 'MyTripList',
     component: () => import('../views/MyTripList.vue'),
+  }, {
+    path: '/my-trip/payment',
+    name: 'Payment',
+    component: () => import('../views/Payment.vue'),
   },
 ];
 

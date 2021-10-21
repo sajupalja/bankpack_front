@@ -40,6 +40,14 @@ const routes = [
         component: () => import('../views/MyTripSpending.vue'),
       },
     ],
+  }, {
+    path: '/survey',
+    name: 'Survey',
+    component: () => import('../views/Survey.vue'),
+  }, {
+    path: '/recommendation',
+    name: 'Recommendation',
+    component: () => import('../views/Recommendation.vue'),
   },
 ];
 

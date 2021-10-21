@@ -87,7 +87,7 @@
           </v-btn>
               <v-btn v-if="e6 == 5"
             id = "survey-next-btn"
-            :to = "{name: 'Recommend'}" link
+            :to = "{name: 'Recommendation'}" link
           >
             제출
           </v-btn>

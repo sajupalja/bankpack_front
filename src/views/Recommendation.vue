@@ -1,20 +1,20 @@
 <template>
-  <div class="recommend">
+  <div class="recommendation">
     <v-container>
         <h3>{{username}}님께 추천드리는 여행지</h3>
 
-        <v-card class="recommend-list-item"
-                v-for="(item,i) in RecommendItems"
+        <v-card class="recommendation-list-item"
+                v-for="(item,i) in recommendationItems"
                 :key="i"
               >
-            <img class="recommend-item-img" :src="item.thumbnail" alt="thumbnail">
-              <div class="recommend-item-content">
-                  <div class="recommend-item-title" >
+            <img class="recommendation-item-img" :src="item.thumbnail" alt="thumbnail">
+              <div class="recommendation-item-content">
+                  <div class="recommendation-item-title" >
                      {{item.cntry_name}} {{item.city_name}}
                   </div>
                   <v-spacer></v-spacer>
                   <div>
-                    <v-btn class="recommend-item-btn">
+                    <v-btn class="recommendation-item-btn">
                     추가
                     </v-btn>
                   </div>
@@ -22,7 +22,7 @@
         </v-card>
     </v-container>
           <v-btn
-        class="recommend-btn"
+        class="recommendation-btn"
         block
         x-large
         :to = "{name: 'Survey'}" link
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       username: '지누무주',
-      RecommendItems: [
+      recommendationItems: [
         {
           cntry_name:'프랑스', city_name:'파리', thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
         }, {
@@ -64,7 +64,7 @@ export default {
 </script>
 
 <style scoped>
-.recommend {
+.recommendation {
   background-color: var(--background);
   height: 100vh;
 }
@@ -73,38 +73,38 @@ export default {
   display : none;
 }
 
-.recommend-list-item {
+.recommendation-list-item {
   display: flex;
   padding: 1rem;
   margin: 2vh;
 }
 
-.recommend-item-img {
+.recommendation-item-img {
   width: 100px;
   height: 100px;
   margin-right: 1rem;
   object-fit: cover;
 }
 
-.recommend-item-content {
+.recommendation-item-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.recommend-item-title {
+.recommendation-item-title {
   font-weight: 600;
   font-size: 1.2rem;
   margin-bottom: 0.4rem;
 }
 
- .recommend-item-btn{
+ .recommendation-item-btn{
   background-color: white;
   font-weight: 600;
   border: solid var(--primary) 2px;
  }
 
- .recommend-btn {
+ .recommendation-btn {
   margin: 1rem 0;
   background-color: var(--primary) !important;
   font-weight: 600;

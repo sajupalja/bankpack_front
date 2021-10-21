@@ -8,17 +8,22 @@
         v-for="(item, i) in tripItems"
         :key="i"
       >
-        <div class="my-trip-card">
-          <img
-            class="my-trip-card-img"
-            :src="item.thumbnail"
-            alt="thumbnail"
-          >
-          <div class="my-trip-card-content">
-            <div class="my-trip-card-title">{{ item.destination }}</div>
-            <div class="my-trip-card-date"> {{ item.startDate }} - {{ item.endDate }} </div>
+        <router-link
+          class="router-link"
+          :to="{ name: 'MyTripDetail', params:{ trvlId: item.trvlId } }"
+        >
+          <div class="my-trip-card">
+            <img
+              class="my-trip-card-img"
+              :src="item.imgUrl"
+              alt="thumbnail"
+            >
+            <div class="my-trip-card-content">
+              <div class="my-trip-card-title">{{ item.trvlName }}</div>
+              <div class="my-trip-card-date"> {{ item.trvlStartDt }} - {{ item.trvlEndDt }} </div>
+            </div>
           </div>
-        </div>
+        </router-link>
       </div>
 
       <!-- 여행 추가 버튼 -->
@@ -39,30 +44,35 @@ export default {
     return {
       tripItems: [
         {
-          thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          destination: '프랑스 파리',
-          startDate: '2021.11.27',
-          endDate: '2021.12.2',
+          trvlId: 1,
+          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
+          trvlName: '프랑스 파리',
+          trvlStartDt: '2021.11.27',
+          trvlEndDt: '2021.12.2',
         }, {
-          thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          destination: '일본 오사카',
-          startDate: '2021.11.27',
-          endDate: '2021.12.2',
+          trvlId: 1,
+          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
+          trvlName: '일본 오사카',
+          trvlStartDt: '2021.11.27',
+          trvlEndDt: '2021.12.2',
         }, {
-          thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          destination: '독일 베를린',
-          startDate: '2021.11.27',
-          endDate: '2021.12.2',
+          trvlId: 1,
+          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
+          trvlName: '독일 베를린',
+          trvlStartDt: '2021.11.27',
+          trvlEndDt: '2021.12.2',
         }, {
-          thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          destination: '호주 시드니',
-          startDate: '2021.11.27',
-          endDate: '2021.12.2',
+          trvlId: 1,
+          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
+          trvlName: '호주 시드니',
+          trvlStartDt: '2021.11.27',
+          trvlEndDt: '2021.12.2',
         }, {
-          thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          destination: '미국 뉴욕',
-          startDate: '2021.11.27',
-          endDate: '2021.12.2',
+          trvlId: 1,
+          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
+          trvlName: '미국 뉴욕',
+          trvlStartDt: '2021.11.27',
+          trvlEndDt: '2021.12.2',
         },
       ],
     };

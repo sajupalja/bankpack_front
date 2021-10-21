@@ -1,6 +1,5 @@
 <template>
-  <div id="app">
-
+  <v-app id="app">
     <!-- smoke screen for screens wider than 600px -->
     <div class="smoke-screen">
       <img
@@ -71,7 +70,7 @@
     </v-navigation-drawer>
 
     <router-view/>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -89,9 +88,9 @@ export default {
         }, {
           title: '후기 검색', icon: 'mdi-forum-outline', route: 'Home',
         }, {
-          title: 'My 여행', icon: 'mdi-bag-carry-on', route: 'Home',
+          title: 'My 여행', icon: 'mdi-bag-carry-on', route: 'MyTripList',
         }, {
-          title: 'My 자산', icon: 'mdi-cash', route: 'Home',
+          title: 'My 자산', icon: 'mdi-cash', route: 'Assets',
         },
       ],
       username: '신채원',
@@ -120,6 +119,10 @@ export default {
   font-family: 'paybooc-Medium';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--background);
 }
 </style>
 
@@ -153,6 +156,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   background-color: white;
+  z-index: 999;
 }
 
 .logo-img {

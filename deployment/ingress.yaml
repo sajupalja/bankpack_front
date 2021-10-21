@@ -26,6 +26,13 @@ spec:
             name: bankpack-spending-svc
             port:
               number: 80
+      - path: /travel
+        pathType: Prefix
+        backend:
+          service:
+            name: bankpack-travel-svc
+            port:
+              number: 80
 
 
 

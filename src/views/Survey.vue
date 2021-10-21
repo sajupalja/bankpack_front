@@ -1,26 +1,24 @@
 <template>
   <div class="survey">
-
     <v-stepper
       v-model="e6"
     >
-    <h3>{{surveySteps[e6-1]}}</h3>
-     <v-stepper-content step="1"
-     class="surveyStepper"
+
+     <v-stepper-content step="1" class="surveyStepper"
       >
-        <p class="surveyContentIn">
-                <v-text-field
+          <h3>{{surveySteps[e6-1]}}</h3>
+        <v-text-field
                   v-model="budget_amt"
                   hide-details
                   single-line
                   type="number"
                   suffix="만원"
                 />
-        </p>
         </v-stepper-content>
           <v-stepper-content step="2"
            class="surveyStepper"
           >
+          <h3>{{surveySteps[e6-1]}}</h3>
             <v-text-field
               v-model="trvl_pd"
               hide-details
@@ -32,6 +30,7 @@
 
         <v-stepper-content step="3"
          class="surveyStepper">
+         <h3>{{surveySteps[e6-1]}}</h3>
             <v-radio-group v-model="cmpn_type">
               <v-radio
                 v-for="n in 4"
@@ -44,6 +43,7 @@
 
         <v-stepper-content step="4"
         class="surveyStepper">
+        <h3>{{surveySteps[e6-1]}}</h3>
             <v-text-field
               v-model="cmpn_cnt"
               hide-details
@@ -55,7 +55,7 @@
 
         <v-stepper-content step="5"
          class="surveyStepper">
-
+            <h3>{{surveySteps[e6-1]}}</h3>
             <v-radio-group v-model="trvl_main_fctr">
               <v-radio
                 v-for="n in 4"
@@ -64,15 +64,14 @@
                 :value="n"
               ></v-radio>
             </v-radio-group>
-
         </v-stepper-content>
 
     </v-stepper>
         <v-container>
              <v-row align="center"
               justify="center">
-          <v-col>
-          <v-btn v-if="e6 > 1"
+          <v-col  v-if="e6 > 1">
+          <v-btn
           id = "survey-pre-btn"
           @click="moveQuestion(-1)"
           >
@@ -80,7 +79,7 @@
           </v-btn>
           </v-col>
           <v-col>
-          <v-btn v-if="e6 < 5"
+          <v-btn  v-if="e6 < 5"
             id = "survey-next-btn"
             @click="moveQuestion(1)"
           >
@@ -100,7 +99,6 @@
 
 
 </template>
-
 <script>
 
 export default {
@@ -144,8 +142,10 @@ export default {
 .surveyStepper{
   height: 60vh;
   background-color: var(--background);
-  display:table;
   color: black;
+      display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #survey-next-btn{
@@ -159,13 +159,6 @@ export default {
   width: 100%;
 }
 
-
-.surveyContentIn{
-    display:table-cell;
-   width:inherit;
-   height:inherit;
-   vertical-align:middle;
-}
 
 .displayToggle{
   display : none;

@@ -17,6 +17,14 @@ const routes = [
     path: '/my-trips',
     name: 'MyTripList',
     component: () => import('../views/MyTripList.vue'),
+  }, {
+    path: '/survry',
+    name: 'Survey',
+    component: () => import('../views/Survey.vue'),
+  }, {
+    path: '/recommend',
+    name: 'Recommend',
+    component: () => import('../views/Recommend.vue'),
   },
 ];
 

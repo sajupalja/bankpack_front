@@ -13,7 +13,7 @@
         v-model="tab"
         grow
       >
-        <v-tabs-slider class="tab-slider"></v-tabs-slider>
+        <v-tabs-slider color="primary"></v-tabs-slider>
         <v-tab
           class="tab trip-info-tab"
           active-class="active-tab"
@@ -41,6 +41,11 @@
 <script>
 export default {
   name: 'MyTripDetail',
+  data() {
+    return {
+      tab: 0,
+    };
+  },
 };
 </script>
 
@@ -73,10 +78,6 @@ export default {
   border-top-left-radius: 25px;
 }
 
-.tab-slider {
-  color: var(--primary);
-}
-
 .tab {
   background-color: var(--background);
   font-size: 1rem;
@@ -96,8 +97,7 @@ export default {
 }
 
 .active-tab {
-  background-color: var(--background);
-  color: var(--primary) !important;
+  font-weight: 600;
 }
 
 .router-link {
@@ -106,5 +106,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: var(--font);
 }
 </style>

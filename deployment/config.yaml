@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: bankpack-config
+  name: bankpack-front-config
 data:
   SERVLET_CONTEXT_PATH: "/"
 # MYSQL DB

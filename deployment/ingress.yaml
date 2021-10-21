@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: bankpack
+  name: bankpack-ing
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
@@ -16,7 +16,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: bankpack
+            name: bankpack-front-svc
             port:
               number: 80
       - path: /spending

@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-import Survey from '../views/Survey.vue';
 
 Vue.use(VueRouter);
 
@@ -11,17 +10,13 @@ const routes = [
     name: 'Home',
     component: Home,
   }, {
-    path: '/survey',
-    name: 'Survey',
-    component: Survey,
-  }, {
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login.vue'),
   }, {
-    path: '/recommend',
-    name: 'Recommend',
-    component: () => import('../views/Recommend.vue'),
+    path: '/my-trips',
+    name: 'MyTripList',
+    component: () => import('../views/MyTripList.vue'),
   },
 ];
 

@@ -22,6 +22,10 @@ const routes = [
     name: 'MyTripList',
     component: () => import('../views/MyTripList.vue'),
   }, {
+    path: '/my-trip/payment',
+    name: 'Payment',
+    component: () => import('../views/Payment.vue'),
+  }, {
     path: '/my-trips/:trvlId',
     name: 'MyTripDetail',
     component: () => import('../views/MyTripDetail.vue'),

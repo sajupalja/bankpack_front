@@ -1,6 +1,5 @@
 <template>
-  <div id="app">
-
+  <v-app id="app">
     <!-- smoke screen for screens wider than 600px -->
     <div class="smoke-screen">
       <img
@@ -71,7 +70,7 @@
     </v-navigation-drawer>
 
     <router-view/>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -157,6 +156,7 @@ body {
   align-items: center;
   justify-content: space-between;
   background-color: white;
+  z-index: 999;
 }
 
 .logo-img {

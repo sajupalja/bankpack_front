@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: bankpack-config
 data:
-  SERVLET_CONTEXT_PATH: "/bankpack"
+  SERVLET_CONTEXT_PATH: "/"
 # MYSQL DB
   DB_SERVER: mysql.mysql
   DB_PORT: "3306"

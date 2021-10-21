@@ -19,3 +19,16 @@ spec:
             name: bankpack
             port:
               number: 80
+      - path: /spending
+        pathType: Prefix
+        backend:
+          service:
+            name: bankpack-spending
+            port:
+              number: 80
+
+
+
+
+
+

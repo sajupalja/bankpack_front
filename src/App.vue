@@ -27,13 +27,13 @@
     </div>
 
     <!-- navigation drawer -->
-    <v-navigation-drawer 
+    <v-navigation-drawer
       v-model="drawer"
       fixed
       temporary
       right
     >
-      <v-list-item 
+      <v-list-item
         v-if="!isLoggedIn"
         :to="{ name: 'Login' }"
         link

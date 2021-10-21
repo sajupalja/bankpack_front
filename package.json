@@ -54,7 +54,8 @@
       "comma-spacing": ["error", {"before": false, "after": true}],
       "comma-dangle": ["error", "always-multiline"],
       "array-element-newline": ["error", {"minItems": 10}],
-      "object-curly-newline": ["error", {"minProperties": 1}]
+      "object-curly-newline": ["error", {"minProperties": 1}],
+      "vue/valid-v-bind": 0
     }
   },
   "browserslist": [

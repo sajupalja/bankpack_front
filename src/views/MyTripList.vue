@@ -10,7 +10,7 @@
       >
         <router-link
           class="router-link"
-          :to="{ name: 'MyTripDetail', params:{ trvlId: item.trvlId } }"
+          :to="{ name: 'MyTripInfo', params:{ trvlId: item.trvlId } }"
         >
           <div class="my-trip-card">
             <img
@@ -128,6 +128,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  color: var(--font);
 }
 
 .my-trip-card-title {

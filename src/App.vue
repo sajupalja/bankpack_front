@@ -33,50 +33,41 @@
       temporary
       right
     >
-      <v-list-item
+      <div
+        class="drawer-header"
         v-if="!isLoggedIn"
-        :to="{ name: 'Login' }"
-        link
       >
-        <v-list-item-content>
-          <v-list-item-title class="text-h6">
-            로그인하기
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+        <router-link
+          class="login-btn"
+          :to="{ name: 'Login' }"
+        >로그인하기</router-link>
+      </div>
 
-      <v-list-item v-else>
-        <v-list-item-content>
-          <v-list-item-title class="text-h6">
-            {{ username }}님
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            subtext
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+      <div
+        class="drawer-header"
+        v-else
+      >
+        {{ username }}님
+      </div>
 
       <v-divider></v-divider>
 
-      <v-list
-        dense
-        nav
+      <div
+        v-for="item in navigationItems"
+        :key="item.title"
       >
-        <v-list-item
-          v-for="item in navigationItems"
-          :key="item.title"
+        <router-link
           :to="{ name: item.route }"
-          link
+          class="navigation-list-item"
         >
           <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon class="navigation-list-icon">{{ item.icon }}</v-icon>
           </v-list-item-icon>
-
           <v-list-item-content>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
-      </v-list>
+        </router-link>
+      </div>
     </v-navigation-drawer>
 
     <router-view/>
@@ -89,6 +80,7 @@ export default {
   data() {
     return {
       drawer: false,
+      isLoggedIn: false,
       navigationItems: [
         {
           title: '홈', icon: 'mdi-home', route: 'Home',
@@ -97,7 +89,7 @@ export default {
         }, {
           title: '후기 검색', icon: 'mdi-forum-outline', route: 'Home',
         }, {
-          title: 'My 여행', icon: 'mdi-bag-carry-on', route: 'Home',
+          title: 'My 여행', icon: 'mdi-bag-carry-on', route: 'MyTripList',
         }, {
           title: 'My 자산', icon: 'mdi-cash', route: 'Assets',
         },
@@ -112,12 +104,20 @@ export default {
 <style>
 @import './assets/css/style.css';
 @font-face {
+    font-family: 'paybooc-Medium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Medium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
     font-family: 'paybooc-Bold';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
 #app {
-  font-family: 'paybooc-Bold';
+  font-family: 'paybooc-Medium';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -125,12 +125,19 @@ export default {
 
 <style scoped>
 .smoke-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
   z-index: 9999;
+  background-color: white;
 }
 
 .smoke-screen-logo {
@@ -139,8 +146,8 @@ export default {
 
 .navbar {
   height: 8vh;
-	position: sticky;
-	top: 0;
+  position: sticky;
+  top: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -151,6 +158,42 @@ export default {
 .logo-img {
   height: 7vh;
   margin-left: 7vw;
+}
+
+.drawer-header {
+  padding: 1.6rem 1.6rem;
+}
+
+.login-btn {
+  text-decoration: none;
+  color: var(--font);
+}
+
+.login-btn:hover {
+  cursor: pointer;
+}
+
+.login-btn:active {
+  color: var(--background);
+}
+
+.navigation-list-item {
+  text-decoration: none;
+  color: var(--font);
+  display: flex;
+  padding-left: 1rem;
+}
+
+.navigation-list-item:hover {
+  cursor: pointer;
+}
+
+.navigation-list-item:active {
+  background-color: var(--background);
+}
+
+.navigation-list-icon {
+  margin-right: 1rem;
 }
 
 @media screen and (max-width: 600px) {

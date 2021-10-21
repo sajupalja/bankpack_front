@@ -42,20 +42,53 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "semi": ["error", "always"],
+      "semi": [
+        "error",
+        "always"
+      ],
       "no-extra-semi": 1,
       "no-unused-vars": 0,
-      "quotes": ["error", "single"],
+      "quotes": [
+        "error",
+        "single"
+      ],
       "no-tabs": 1,
-      "indent": ["error", 2],
+      "indent": [
+        "error",
+        2
+      ],
       "no-trailing-spaces": 1,
-      "no-multiple-empty-lines": ["error", {"max":2, "maxEOF": 0}],
+      "no-multiple-empty-lines": [
+        "error",
+        {
+          "max": 2,
+          "maxEOF": 0
+        }
+      ],
       "no-multi-spaces": 1,
-      "comma-spacing": ["error", {"before": false, "after": true}],
-      "comma-dangle": ["error", "always-multiline"],
-      "array-element-newline": ["error", {"minItems": 10}],
-      "object-curly-newline": ["error", {"minProperties": 1}],
-      "vue/valid-v-bind": 0
+      "comma-spacing": [
+        "error",
+        {
+          "before": false,
+          "after": true
+        }
+      ],
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
+      "array-element-newline": [
+        "error",
+        {
+          "minItems": 10
+        }
+      ],
+      "object-curly-newline": [
+        "error",
+        {
+          "minProperties": 1
+        }
+      ]
     }
   },
   "browserslist": [

@@ -128,7 +128,6 @@ export default {
 .asset {
   background-color: var(--background);
   display: flex;
-  min-height: 90vh;
   height: 100%;
   flex-direction: column;
   position: relative;

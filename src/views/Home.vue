@@ -11,12 +11,16 @@
         </div>
         <div class="budget-card-body">
           <span class="travel-budget">{{ travelBudget }}원</span>
-          <span class="more-btn">더보기</span>
+          <span
+            class="more-btn"
+            @click="goToAssets"
+          >더보기</span>
         </div>
       </div>
 
       <v-btn
         class="recommend-btn"
+        :to="{ name: 'Survey' }"
         block
         x-large
       >
@@ -31,17 +35,18 @@
         <div class="my-trip-list">
           <div
             class="my-trip-list-item"
-            v-for="(item, i) in tripItems"
-            :key="i"
+            v-for="item in tripItems"
+            :key="item.trvlId"
+            @click="goToTrip(item.trvlId)"
           >
             <img
               class="my-trip-item-img"
-              :src="item.thumbnail"
+              :src="item.imgUrl"
               alt="thumbnail"
             >
             <div class="my-trip-item-content">
-              <div class="my-trip-item-title">{{ item.destination }}</div>
-              <div class="my-trip-item-date"> {{ item.startDate }} - {{ item.endDate }} </div>
+              <div class="my-trip-item-title">{{ item.trvlName }}</div>
+              <div class="my-trip-item-date"> {{ item.trvlStartDt }} - {{ item.trvlEndDt }} </div>
             </div>
             <v-spacer></v-spacer>
             <div class="my-trip-item-arrow">
@@ -62,18 +67,30 @@ export default {
       travelBudget: '1,000,000,000',
       tripItems: [
         {
-          thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          destination: '프랑스 파리',
-          startDate: '2021.11.27',
-          endDate: '2021.12.2',
+          trvlId: 1,
+          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
+          trvlName: '프랑스 파리',
+          trvlStartDt: '2021.11.27',
+          trvlEndDt: '2021.12.2',
         }, {
-          thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          destination: '일본 오사카',
-          startDate: '2021.11.27',
-          endDate: '2021.12.2',
+          trvlId: 1,
+          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
+          trvlName: '일본 오사카',
+          trvlStartDt: '2021.11.27',
+          trvlEndDt: '2021.12.2',
         },
       ],
     };
+  },
+  methods: {
+    goToTrip(trvlId) {
+      // eslint-disable-next-line object-curly-newline
+      this.$router.push({ name: 'MyTripDetail', params: { trvlId: trvlId } });
+    },
+    goToAssets() {
+      // eslint-disable-next-line object-curly-newline
+      this.$router.push({ name: 'Assets' });
+    },
   },
 };
 </script>

@@ -14,9 +14,28 @@
           <h1>{{money}}원</h1>
         </v-card>
       </div>
+      <span class="category">계좌 정보</span>
       <div
         class="each-assets"
-        v-for="asset in assetList"
+        v-for="asset in bookList"
+        :key=asset.id
+      >
+        <v-card class="each-asset-box">
+          <img v-if="asset.category === 'book'" src="../assets/img/bankbook.png" alt="">
+          <img v-else src="../assets/img/kard.png" alt="">
+          <div>{{asset.name}}</div>
+          <div>
+            <button class="toggle-background" @click="toggling">
+              <div class="toggle-circle" :class="{ 'active': toggleOn }"></div>
+            </button>
+            {{asset.balance}}
+          </div>
+        </v-card>
+      </div>
+      <span class="category">카드 정보</span>
+      <div
+        class="each-assets"
+        v-for="asset in cardList"
         :key=asset.id
       >
         <v-card class="each-asset-box">
@@ -52,13 +71,14 @@ export default {
     return {
       toggleOn: false,
       money: '1,500',
-      assetList: [
+      bookList: [
         {
           id:1, category:'book', name:'국민은행 one 통장', balance: '1,000',
-        },
-        {
+        }, {
           id:2, category:'book', name:'국민은행 one 통장', balance: '500',
         },
+      ],
+      cardList: [
         {
           id:3, category:'card', name:'국민은행 카드', balance: '500',
         },
@@ -218,5 +238,9 @@ export default {
 .toggle-circle.active {
   background-color: var(--primary);
   transform: translateX(120%);
+}
+
+.category{
+  margin-left: 1rem;
 }
 </style>

@@ -32,6 +32,7 @@
         class="payment-history-card"
         v-for="item in paymentHistoryItem"
         :key="item.trvlPayId"
+        @click="goToPaymentDetail"
       >
         <div
           class="payment-history-icon"
@@ -52,6 +53,7 @@
     <v-btn
       class="payment-add-btn"
       color="primary"
+      :to="{ name: 'Payment' }"
       fixed
       bottom
       right
@@ -152,6 +154,10 @@ export default {
         return 'mdi-minus';
       }
     },
+    goToPaymentDetail() {
+      // eslint-disable-next-line object-curly-newline
+      this.$router.push({ name: 'Payment' });
+    },
   },
 };
 </script>
@@ -214,6 +220,14 @@ export default {
   margin: 0.6rem 0;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   display: flex;
+}
+
+.payment-history-card:hover {
+  cursor: pointer;
+}
+
+.payment-history-card:active {
+  background-color: var(--background);
 }
 
 .payment-history-icon {

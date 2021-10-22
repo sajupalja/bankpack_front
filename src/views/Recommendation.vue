@@ -1,41 +1,46 @@
 <template>
   <div class="recommendation">
     <v-container>
-        <h3>{{username}}님께 추천드리는 여행지</h3>
+        <h3>{{ username }}님께 추천드리는 여행지</h3>
         <div
-            v-for="(item,i) in recommendationItems"
-            :key="i">
-            <router-link
-              class="router-link"
-              :to="{ name: 'RecommendationDetail', params:{ recommendationId: item.id} }"
-            >
-        <v-card class="recommendation-list-item">
-            <img class="recommendation-item-img" :src="item.thumbnail" alt="thumbnail">
+          v-for="(item,i) in recommendationItems"
+          :key="i"
+        >
+          <router-link
+            class="router-link"
+            :to="{ name: 'RecommendationDetail', params:{ recommendationId: item.id} }"
+          >
+            <v-card class="recommendation-list-item">
+              <img
+                class="recommendation-item-img"
+                :src="item.thumbnail"
+                alt="thumbnail"
+              >
               <div class="recommendation-item-content">
-                  <div class="recommendation-item-title" >
-                     {{item.cntry_name}} {{item.city_name}}
-                  </div>
-                  <v-spacer></v-spacer>
-                  <div>
-                    <v-btn class="recommendation-item-btn"
-                    :to = "{name: 'Survey'}" link>
-                    추가
-                    </v-btn>
-                  </div>
+                <div class="recommendation-item-title">
+                  {{item.cntry_name}} {{item.city_name}}
+                </div>
               </div>
-
-        </v-card>
-        </router-link>
+              <v-btn
+                class="recommendation-item-btn"
+                :to = "{name: 'MyTripList'}"
+                link
+              >
+                추가
+              </v-btn>
+            </v-card>
+          </router-link>
          </div>
-    </v-container>
-          <v-btn
+      <v-btn
         class="recommendation-btn"
         block
         x-large
-        :to = "{name: 'Survey'}" link
+        :to = "{name: 'Survey'}"
+        link
       >
         다시 추천 받으러 가기
       </v-btn>
+    </v-container>
   </div>
 </template>
 
@@ -65,8 +70,6 @@ export default {
   watch : {},
 
 };
-
-
 </script>
 
 <style scoped>
@@ -81,13 +84,14 @@ export default {
 
 .recommendation-list-item {
   display: flex;
+  align-items: center;
   padding: 1rem;
-  margin: 2vh;
+  margin: 2vh 0;
 }
 
 .recommendation-item-img {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   margin-right: 1rem;
   object-fit: cover;
 }
@@ -101,13 +105,13 @@ export default {
 .recommendation-item-title {
   font-weight: 600;
   font-size: 1.2rem;
-  margin-bottom: 0.4rem;
 }
 
- .recommendation-item-btn{
+ .recommendation-item-btn {
   background-color: white;
   font-weight: 600;
   border: solid var(--primary) 2px;
+  margin-left: auto;
  }
 
  .recommendation-btn {

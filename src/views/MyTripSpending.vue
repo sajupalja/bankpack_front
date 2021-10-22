@@ -49,6 +49,16 @@
         </div>
       </div>
     </div>
+    <v-btn
+      class="payment-add-btn"
+      color="primary"
+      fixed
+      bottom
+      right
+      fab
+    >
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -231,5 +241,9 @@ export default {
 .payment-history-date, .payment-history-method {
   font-size: 0.6rem;
   color: var(--grey);
+}
+
+.payment-add-btn {
+  margin: 0.6rem;
 }
 </style>

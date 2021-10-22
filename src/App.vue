@@ -31,6 +31,7 @@
 
     <!-- navigation drawer -->
     <v-navigation-drawer
+      class="navigation-drawer"
       v-model="drawer"
       fixed
       temporary
@@ -162,6 +163,10 @@ export default {
 .logo-img {
   height: 7vh;
   margin-left: 7vw;
+}
+
+.navigation-drawer {
+  z-index: 1999;
 }
 
 .drawer-header {

@@ -18,12 +18,19 @@
           <p>작성일: 2021/10/15</p>
         </div>
         <div class="review-expense">
-          <h3>총 지출 비용</h3>
-          <h1>XXX 원</h1>
+          <h5>총 지출 비용</h5>
+          <h2>1000000 원</h2>
         </div>
       </div>
     </div>
-    <div class="review-chart">차트</div>
+    <div class="review-chart">
+      <h5 class="chart-title">하얀족제비님의 지출 내역</h5>
+      <pie-chart
+        :chart-data="chartData"
+        :options="chartOptions"
+        class="pie-chart"
+      />
+    </div>
     <div class="review-contents">
       <p>여행 기록</p>
       <hr>
@@ -32,8 +39,41 @@
 </template>
 
 <script>
+import PieChart from '../components/PieChart.js';
+
 export default {
   name: 'ReviewInfo',
+  components: {
+    PieChart,
+  },
+  data () {
+    return {
+      chartOptions: {
+        responsive: true,
+        cutoutPercentage: 1,
+        legend: {
+          position: 'right',
+          labels: {
+            boxWidth: 15,
+            fontFamily: 'paybooc-Medium',
+            fontSize: 15,
+          },
+        },
+      },
+      chartData: {
+        hoverBorderWidth: 10,
+        labels: ['식비', '숙비', '교통비', '활동', '기타'],
+        datasets: [
+          {
+            label: '카테고리별 지출',
+            backgroundColor: ['#2878A0', '#FAF8D4', '#BBDDFF', '#EF8354', '#242038'],
+            data: [0.1, 0.2, 0.3, 0.3, 0.1],
+          },
+        ],
+      },
+    };
+  },
+  methods: {},
 };
 </script>
 
@@ -55,8 +95,8 @@ export default {
 }
 
 .review-info-left {
-  height: 15rem;
-  width: 17rem;
+  height: 12rem;
+  width: 15rem;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -70,9 +110,14 @@ export default {
   text-align: end;
 }
 
+.review-info-left p {
+  font-size: .9rem;
+}
+
 .review-write-info > p {
   margin: 0;
   color: #8d8d8d;
+  font-size: .75rem;
 }
 
 .review-expense {
@@ -80,11 +125,20 @@ export default {
 }
 
 .review-chart {
-  height: 30%;
-  background-color: white;
+  height: 40%;
 }
 
 .review-contents {
   margin: 2rem;
+}
+
+.pie-chart {
+  margin-left: 2rem;
+  width: 70vw;
+}
+
+.chart-title {
+  text-align: center;
+  margin-top: 3rem;
 }
 </style>

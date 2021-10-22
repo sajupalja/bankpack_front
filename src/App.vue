@@ -13,10 +13,14 @@
     <!-- header -->
     <div class="navbar">
       <div></div>
-      <img
-        class="logo-img"
-        src="./assets/icon.png"
+      <router-link
+        :to="{ name: 'Home' }"
       >
+        <img
+          class="logo-img"
+          src="./assets/icon.png"
+        >
+      </router-link>
       <v-btn
         @click="drawer = !drawer"
         icon

@@ -67,7 +67,6 @@ export default {
 .body {
   position: relative;
   top: -50px;
-  height: 1000px;
   background-color: var(--background);
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;

@@ -84,7 +84,7 @@ export default {
         {
           title: '홈', icon: 'mdi-home', route: 'Home',
         }, {
-          title: '여행지 추천', icon: 'mdi-airplane', route: 'Home',
+          title: '여행지 추천', icon: 'mdi-airplane', route: 'Survey',
         }, {
           title: '후기 검색', icon: 'mdi-forum-outline', route: 'ReviewList',
         }, {

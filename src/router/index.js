@@ -9,23 +9,28 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-  }, {
+  },
+  {
     path: '/assets',
     name: 'Assets',
     component: () => import('../views/Asset.vue'),
-  }, {
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login.vue'),
-  }, {
+  },
+  {
     path: '/my-trips',
     name: 'MyTripList',
     component: () => import('../views/MyTripList.vue'),
-  }, {
+  },
+  {
     path: '/my-trip/payment',
     name: 'Payment',
     component: () => import('../views/Payment.vue'),
-  }, {
+  },
+  {
     path: '/my-trips/:trvlId',
     name: 'MyTripDetail',
     component: () => import('../views/MyTripDetail.vue'),
@@ -40,23 +45,28 @@ const routes = [
         component: () => import('../views/MyTripSpending.vue'),
       },
     ],
-  }, {
+  },
+  {
     path: '/reviews',
     name: 'ReviewList',
     component: () => import('../views/ReviewList.vue'),
-  }, {
+  },
+  {
     path: '/reviews/:reviewId',
     name: 'ReviewInfo',
     component: () => import('../views/ReviewInfo.vue'),
-  }, {
+  },
+  {
     path: '/error',
     name: 'Error',
     component: () => import('../views/Error.vue'),
-  }, {
+  },
+  {
     path: '/survey',
     name: 'Survey',
     component: () => import('../views/Survey.vue'),
-  }, {
+  },
+  {
     path: '/recommendation',
     name: 'Recommendation',
     component: () => import('../views/Recommendation.vue'),

@@ -5,4 +5,12 @@
   --error: #EF8354;
   --shadow: #E1E1E1;
   --background: #F1F4F6;
+  --font: #242038;
+  --grey: #808080;
+  --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.router-link {
+  text-decoration: none;
+  color: var(--font);
 }

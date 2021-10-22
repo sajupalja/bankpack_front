@@ -22,6 +22,24 @@
         {{recommendationItem.cntry_name}} {{recommendationItem.city_name}}의 추천 후기
     </h4>
     <hr>
+        <div
+        v-for="item in reviewItems"
+        :key="item.id">
+        <router-link
+          class="router-link"
+          :to="{ name: 'ReviewInfo', params:{ reviewId: item.id} }"
+        >
+          <v-card class="review">
+            <img v-if="item.thumbnail" :src="item.thumbnail" alt="" class="thumbnail-img">
+            <div v-else class="thumbnail-img"></div>
+            <div class="review-info">
+              <h2>{{item.title}}</h2>
+              <p>{{item.date}}</p>
+              <p>{{item.desc}}</p>
+            </div>
+          </v-card>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -51,6 +69,15 @@ export default {
           },
         ],
       },
+      reviewItems: [
+        {
+          id: 1, title: '프라하 여행', thumbnail: 'https://image.kkday.com/v2/image/get/w_960%2Cc_fit%2Cq_55%2Ct_webp/s1.kkday.com/product_22175/20200403063015_QVE1e/jpg', date: '2021-02-03', desc: 'no contents',
+        }, {
+          id: 2, title: '미국 여행', thumbnail: '', date: '2021-02-03', desc: 'no contents',
+        }, {
+          id: 3, title: '런던 여행', thumbnail: '', date: '2021-02-03', desc: 'no contents',
+        },
+      ],
     };
   },
 };
@@ -88,6 +115,38 @@ export default {
 .spending-pie-chart-container {
   margin: 1.4rem auto;
   width: 65vw;
+}
+
+.review {
+  display: flex;
+  margin: 20px;
+  padding: 1rem;
+  align-items: center;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.review:hover {
+  background-color: var(--shadow);
+  transform: scale(1.05);
+}
+
+.review-info {
+  margin-left: 1.5rem;
+}
+
+.review-info p {
+  margin: 0;
+}
+
+.review-info > p:nth-child(2) {
+  font-size: .5rem;
+}
+
+.thumbnail-img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
 }
 
 </style>

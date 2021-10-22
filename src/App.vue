@@ -86,7 +86,7 @@ export default {
         }, {
           title: '여행지 추천', icon: 'mdi-airplane', route: 'Survey',
         }, {
-          title: '후기 검색', icon: 'mdi-forum-outline', route: 'Home',
+          title: '후기 검색', icon: 'mdi-forum-outline', route: 'ReviewList',
         }, {
           title: 'My 여행', icon: 'mdi-bag-carry-on', route: 'MyTripList',
         }, {
@@ -119,10 +119,6 @@ export default {
   font-family: 'paybooc-Medium';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  background-color: var(--background);
 }
 </style>
 

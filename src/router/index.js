@@ -41,6 +41,18 @@ const routes = [
       },
     ],
   }, {
+    path: '/reviews',
+    name: 'ReviewList',
+    component: () => import('../views/ReviewList.vue'),
+  }, {
+    path: '/reviews/:reviewId',
+    name: 'ReviewInfo',
+    component: () => import('../views/ReviewInfo.vue'),
+  }, {
+    path: '/error',
+    name: 'Error',
+    component: () => import('../views/Error.vue'),
+  }, {
     path: '/survey',
     name: 'Survey',
     component: () => import('../views/Survey.vue'),

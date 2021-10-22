@@ -2,28 +2,34 @@
   <div class="survey">
     <v-stepper
       v-model="e6"
+      style="box-shadow: none;"
     >
 
      <v-stepper-content step="1" class="surveyStepper"
       >
           <h3>{{surveySteps[e6-1]}}</h3>
         <v-text-field
-                  v-model="budget_amt"
+                  :value="budget_amt"
                   hide-details
                   single-line
-                  type="number"
+                  :rules="[numberRule]"
+                  ref = "budget_amt_form"
+                  @input="numFilter"
                   suffix="만원"
                 />
+                {{budget_amt}}
         </v-stepper-content>
           <v-stepper-content step="2"
            class="surveyStepper"
           >
           <h3>{{surveySteps[e6-1]}}</h3>
             <v-text-field
-              v-model="trvl_pd"
+              :value="trvl_pd"
               hide-details
               single-line
-              type="number"
+              :rules="[numberRule]"
+              @input="numFilter"
+              ref = "trvl_pd_form"
               suffix="일"
             />
         </v-stepper-content>
@@ -45,10 +51,12 @@
         class="surveyStepper">
         <h3>{{surveySteps[e6-1]}}</h3>
             <v-text-field
-              v-model="cmpn_cnt"
+              :value="cmpn_cnt"
               hide-details
               single-line
-              type="number"
+              :rules="[numberRule]"
+              @input="numFilter"
+              ref = "cmpn_cnt_form"
               suffix="명"
             />
         </v-stepper-content>
@@ -67,7 +75,7 @@
         </v-stepper-content>
 
     </v-stepper>
-        <v-container>
+        <v-container class="survey-btns">
              <v-row align="center"
               justify="center">
           <v-col  v-if="e6 > 1">
@@ -119,14 +127,37 @@ export default {
       cmpn_type : '',
       cmpn_cnt : '',
       trvl_main_fctr : '',
+      numberRule: v => {
+        if (!v.trim()) return true;
+        if (!isNaN(parseInt(v)) && v >= 0 && v <= 999) return true;
+        return '숫자는 0 부터 999 까지만 작성해주세요';
+      },
     };
   },
   methods:{
     moveQuestion(btnType){
       this.e6 += btnType;
     },
+
+    numFilter(val){
+      val = val.replace(/[^0-9]/g, '');
+      var field = this.$refs.budget_amt_form;
+      switch (this.e6){
+      case 2:
+        field = this.$refs.trvl_pd_form;
+        break;
+      case 4:
+        field = this.$refs.cmpn_cnt_form;
+        break;
+
+      }
+
+      console.log(field);
+      field.lazyValue = val;
+    },
   },
-  watch : {},
+  watch: {},
+
 
 };
 
@@ -147,7 +178,9 @@ export default {
     align-items: center;
     justify-content: center;
 }
-
+.survey-btns{
+  background-color: var(--background);
+}
 #survey-next-btn{
   background-color: var(--primary) !important;
   color: white;

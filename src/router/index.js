@@ -71,6 +71,11 @@ const routes = [
     name: 'Recommendation',
     component: () => import('../views/Recommendation.vue'),
   },
+  {
+    path: '/recommendation/:recommendationId',
+    name: 'RecommendationDetail',
+    component: () => import('../views/RecommendationDetail.vue'),
+  },
 ];
 
 const router = new VueRouter({

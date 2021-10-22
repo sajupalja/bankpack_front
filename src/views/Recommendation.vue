@@ -2,11 +2,14 @@
   <div class="recommendation">
     <v-container>
         <h3>{{username}}님께 추천드리는 여행지</h3>
-
-        <v-card class="recommendation-list-item"
-                v-for="(item,i) in recommendationItems"
-                :key="i"
-              >
+        <div
+            v-for="(item,i) in recommendationItems"
+            :key="i">
+            <router-link
+              class="router-link"
+              :to="{ name: 'RecommendationDetail', params:{ recommendationId: item.id} }"
+            >
+        <v-card class="recommendation-list-item">
             <img class="recommendation-item-img" :src="item.thumbnail" alt="thumbnail">
               <div class="recommendation-item-content">
                   <div class="recommendation-item-title" >
@@ -14,12 +17,16 @@
                   </div>
                   <v-spacer></v-spacer>
                   <div>
-                    <v-btn class="recommendation-item-btn">
+                    <v-btn class="recommendation-item-btn"
+                    :to = "{name: 'Survey'}" link>
                     추가
                     </v-btn>
                   </div>
               </div>
+
         </v-card>
+        </router-link>
+         </div>
     </v-container>
           <v-btn
         class="recommendation-btn"
@@ -41,14 +48,13 @@ export default {
       username: '지누무주',
       recommendationItems: [
         {
-          cntry_name:'프랑스', city_name:'파리', thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
+          id:'1', cntry_name:'프랑스', city_name:'파리', thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
         }, {
-          cntry_name:'일본', city_name:'도쿄', thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
+          id:'2', cntry_name:'일본', city_name:'도쿄', thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
         }, {
-          cntry_name:'영국', city_name:'런던', thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
+          id:'3', cntry_name:'영국', city_name:'런던', thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
         },
       ],
-      trvl_place_id : '',
     };
   },
   methods:{

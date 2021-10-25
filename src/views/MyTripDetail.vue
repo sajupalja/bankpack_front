@@ -3,11 +3,11 @@
     <div class="header">
       <img
         class="header-img"
-        src="https://lp-cms-production.imgix.net/2021-03/shutterstock_304631102.jpg?auto=format&fit=crop&sharp=10&vib=20&ixlib=react-8.6.4&w=850"
+        :src="tripInfo.imgUrl"
         alt="header-image"
       >
       <div class="trip-destination-overlay">
-        <h1 class="trip-destination">{{ cntryName }} {{ cityName }}</h1>
+        <h1 class="trip-destination">{{ tripInfo.cntryName }} {{ tripInfo.cityName }}</h1>
       </div>
     </div>
     <div class="body">
@@ -36,20 +36,34 @@
           >지출 관리</router-link>
         </v-tab>
       </v-tabs>
-      <router-view></router-view>
+      <router-view :trip-info="tripInfo"></router-view>
     </div>
   </div>
 </template>
 
 <script>
+import api from '../api/api.js';
+
 export default {
   name: 'MyTripDetail',
   data() {
     return {
       tab: 0,
-      cntryName: '프랑스',
-      cityName: '파리',
+      tripInfo: [],
     };
+  },
+  methods: {
+    fetchTripInfo() {
+      this.$axios.get(api.myTripDetail + this.$route.params.trvlId)
+        .then(res => {
+          console.log(res.data);
+          this.tripInfo = res.data;
+        })
+        .catch(err => console.error(err));
+    },
+  },
+  mounted() {
+    this.fetchTripInfo();
   },
 };
 </script>

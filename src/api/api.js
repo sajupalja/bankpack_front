@@ -3,4 +3,9 @@ export default {
   fetchAllCardListUrl: '/spending/card/list?userId=1',
   accountToggleUrl: '/spending/account',
   cardToggleUrl: '/spending/card',
+
+  // my trip
+  myTripList:'/travel/reviews/user/1',
+  myTripDetail: '/travel/reviews/',
+  tripPaymentList: '/spending/travel/list/',
 };

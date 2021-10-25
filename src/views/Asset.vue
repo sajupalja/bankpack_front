@@ -65,55 +65,15 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../api/api';
+
 export default {
   name: 'Assets',
   data() {
     return {
       toggleOn: false,
       money: '1,500',
-      bookList: [{
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      },
-      {
-        id: 1, name: 'asdf', balance: 1235,
-      }],
+      bookList: [],
       cardList: [],
       connect: true,
       showBtn: false,
@@ -122,7 +82,7 @@ export default {
   },
   async mounted() {
     window.addEventListener('scroll', this.onScroll);
-    const response = await axios.get('https://bankpack.169.56.174.130.nip.io/travel/travel/reviews');
+    const response = await this.$axios.get(api.assetUrl);
     console.log(response);
   },
   beforeDestroy () {

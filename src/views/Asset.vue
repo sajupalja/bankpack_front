@@ -72,16 +72,57 @@ export default {
     return {
       toggleOn: false,
       money: '1,500',
-      bookList: [],
+      bookList: [{
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      },
+      {
+        id: 1, name: 'asdf', balance: 1235,
+      }],
       cardList: [],
       connect: true,
       showBtn: false,
       lastScrollPosition: 0,
     };
   },
-  mounted() {
+  async mounted() {
     window.addEventListener('scroll', this.onScroll);
-    const response = axios.get('http://bankpack.169.56.174.130.nip.io/spending/account/list?userId=1');
+    const response = await axios.get('https://bankpack.169.56.174.130.nip.io/travel/travel/reviews');
     console.log(response);
   },
   beforeDestroy () {
@@ -95,6 +136,10 @@ export default {
       }
       this.showBtn = currentScrollPosition > this.lastScrollPosition;
       this.lastScrollPosition = currentScrollPosition;
+
+      if((window.innerHeight + window.scrollY) === document.body.offsetHeight) {
+        this.showBtn = !this.showBtn;
+      }
     },
     toggling() {
       console.log('h');

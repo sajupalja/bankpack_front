@@ -77,6 +77,7 @@
       class="connection-btn"
       :class="{ 'hidden-btn': showBtn }"
       elevation="2"
+      @click="fetchData"
     >
       계좌 정보 불러오기
     </v-btn>
@@ -117,17 +118,20 @@ export default {
   },
   async mounted() {
     window.addEventListener('scroll', this.onScroll);
-    try {
-      const accountResponse = await this.$axios.get(api.fetchAllAccountListUrl);
-      const cardResponse = await this.$axios.get(api.fetchAllCardListUrl);
+    if (localStorage.getItem('asset-info')) {
+      try {
+        const accountResponse = await this.$axios.get(api.fetchAllAccountListUrl);
+        const cardResponse = await this.$axios.get(api.fetchAllCardListUrl);
 
-      this.accountList = accountResponse.data;
-      this.cardList = cardResponse.data;
-      console.log(this.cardList);
-    } catch (error) {
-      this.$router.push({
-        name: 'Error',
-      });
+        this.accountList = accountResponse.data;
+        this.cardList = cardResponse.data;
+      } catch (error) {
+        this.$router.push({
+          name: 'Error',
+        });
+      }
+    } else {
+      localStorage.setItem('asset-info', 1);
     }
   },
   beforeDestroy () {
@@ -144,6 +148,19 @@ export default {
 
       if((window.innerHeight + window.scrollY) === document.body.offsetHeight) {
         this.showBtn = !this.showBtn;
+      }
+    },
+    async fetchData() {
+      try {
+        const accountResponse = await this.$axios.get(api.fetchAllAccountListUrl);
+        const cardResponse = await this.$axios.get(api.fetchAllCardListUrl);
+
+        this.accountList = accountResponse.data;
+        this.cardList = cardResponse.data;
+      } catch (error) {
+        this.$router.push({
+          name: 'Error',
+        });
       }
     },
     toggling(id, category) {

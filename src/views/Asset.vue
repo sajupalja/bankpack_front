@@ -65,57 +65,15 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'Assets',
   data() {
     return {
       toggleOn: false,
       money: '1,500',
-      bookList: [
-        {
-          id:1, category:'book', name:'국민은행 one 통장', balance: '1,000',
-        }, {
-          id:2, category:'book', name:'국민은행 one 통장', balance: '500',
-        },
-      ],
-      cardList: [
-        {
-          id:3, category:'card', name:'국민은행 카드', balance: '500',
-        },
-        {
-          id:4, category:'card', name:'국민은행 카드', balance: '500',
-        },
-        {
-          id:5, category:'card', name:'국민은행 카드', balance: '500',
-        },
-        {
-          id:6, category:'card', name:'국민은행 카드', balance: '500',
-        },
-        {
-          id:7, category:'card', name:'국민은행 카드', balance: '500',
-        },
-        {
-          id:8, category:'card', name:'국민은행 카드', balance: '500',
-        },
-        {
-          id:9, category:'card', name:'국민은행 카드', balance: '500',
-        },
-        {
-          id:10, category:'card', name:'국민은행 카드', balance: '500',
-        },
-        {
-          id:11, category:'card', name:'국민은행 카드', balance: '500',
-        },
-        {
-          id:12, category:'card', name:'국민은행 카드', balance: '500',
-        },
-        {
-          id:13, category:'card', name:'국민은행 카드', balance: '500',
-        },
-        {
-          id:14, category:'card', name:'국민은행 카드', balance: '500',
-        },
-      ],
+      bookList: [],
+      cardList: [],
       connect: true,
       showBtn: false,
       lastScrollPosition: 0,
@@ -123,6 +81,8 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.onScroll);
+    const response = axios.get('http://bankpack.169.56.174.130.nip.io/spending/account/list?userId=1');
+    console.log(response);
   },
   beforeDestroy () {
     window.removeEventListener('scroll', this.onScroll);
@@ -177,11 +137,6 @@ export default {
   align-items: center;
   padding: 1rem;
   margin: .5rem 1rem;
-  transition: .2s all;
-}
-
-.each-asset-box:hover {
-  transform: scale(1.05);
 }
 
 .each-asset-box > img {

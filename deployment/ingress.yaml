@@ -33,6 +33,13 @@ spec:
             name: bankpack-travel-svc
             port:
               number: 80
+      - path: /user
+        pathType: Prefix
+        backend:
+          service:
+            name: bankpack-user-svc
+            port:
+              number: 80
 
 
 

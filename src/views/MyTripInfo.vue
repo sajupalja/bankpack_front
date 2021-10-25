@@ -118,6 +118,7 @@ export default {
   margin: 1rem 0;
   background-color: white;
   box-shadow: var(--box-shadow);
+  border-radius: var(--card-border-radius);
 }
 
 .divider {
@@ -137,6 +138,7 @@ export default {
   padding: 1rem 0.8rem 0.4rem 0.8rem;
   background-color: white;
   box-shadow: var(--box-shadow);
+  border-radius: var(--card-border-radius);
 }
 
 .timeline-card-divider {

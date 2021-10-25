@@ -6,6 +6,9 @@
         src="https://lp-cms-production.imgix.net/2021-03/shutterstock_304631102.jpg?auto=format&fit=crop&sharp=10&vib=20&ixlib=react-8.6.4&w=850"
         alt="header-image"
       >
+      <div class="trip-destination-overlay">
+        <h1 class="trip-destination">{{ cntryName }} {{ cityName }}</h1>
+      </div>
     </div>
     <div class="body">
       <v-tabs
@@ -44,6 +47,8 @@ export default {
   data() {
     return {
       tab: 0,
+      cntryName: '프랑스',
+      cityName: '파리',
     };
   },
 };
@@ -62,6 +67,20 @@ export default {
   object-fit: cover;
   height: 100%;
   width: 100%;
+}
+
+.trip-destination-overlay {
+  position: relative;
+  top: -110px;
+  padding-top: 0.2rem;
+  padding-bottom: 1.4rem;
+  background: rgb(0,0,0);
+  background: linear-gradient(0deg, rgba(0,0,0,0.8) 30%, rgba(74,74,74,0.6) 77%, rgba(147,147,147,0.2) 99%);
+}
+
+.trip-destination {
+  margin-left: 1rem;
+  color: white;
 }
 
 .body {

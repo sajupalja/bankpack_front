@@ -11,44 +11,63 @@
           class="travel-asset-box"
         >
           <h3>여행 예산</h3>
-          <h1>{{money}}원</h1>
+          <h1>{{totalMoney}}원</h1>
         </v-card>
       </div>
-      <span class="category">계좌 정보</span>
-      <div
-        class="each-assets"
-        v-for="asset in bookList"
-        :key=asset.id
-      >
-        <v-card class="each-asset-box">
-          <img v-if="asset.category === 'book'" src="../assets/img/bankbook.png" alt="">
-          <img v-else src="../assets/img/kard.png" alt="">
-          <div>{{asset.name}}</div>
-          <div>
-            <button class="toggle-background" @click="toggling">
-              <div class="toggle-circle" :class="{ 'active': toggleOn }"></div>
-            </button>
-            {{asset.balance}}
-          </div>
-        </v-card>
+      <div class="account-section">
+        <span class="category">계좌 정보</span>
+        <div v-if="accountList.length === 0" class="category no-data">
+          <h2>계좌 정보가 없습니다.</h2>
+        </div>
+        <div
+          class="each-assets"
+          v-for="asset in accountList"
+          :key=asset.accountId
+        >
+          <v-card class="each-asset-box">
+            <img src="../assets/img/bankbook.png" alt="">
+            <div class="asset-name">
+              <h4>{{asset.acntName}}</h4>
+              <span>{{asset.acntNo}}</span>
+            </div>
+            <div>
+              <button
+                class="toggle-background"
+                @click="toggling(asset.accountId, 'account')"
+              >
+                <div class="toggle-circle" :class="{ 'active': asset.useYn === 'Y' }"></div>
+              </button>
+              {{asset.balAmt.toLocaleString()}} 원
+            </div>
+          </v-card>
+        </div>
       </div>
-      <span class="category">카드 정보</span>
-      <div
-        class="each-assets"
-        v-for="asset in cardList"
-        :key=asset.id
-      >
-        <v-card class="each-asset-box">
-          <img v-if="asset.category === 'book'" src="../assets/img/bankbook.png" alt="">
-          <img v-else src="../assets/img/kard.png" alt="">
-          <div>{{asset.name}}</div>
-          <div>
-            <button class="toggle-background" @click="toggling">
-              <div class="toggle-circle" :class="{ 'active': toggleOn }"></div>
-            </button>
-            {{asset.balance}}
-          </div>
-        </v-card>
+      <div class="card-section">
+        <span class="category">카드 정보</span>
+        <div v-if="cardList.length === 0" class="category no-data">
+          <h2>카드 정보가 없습니다.</h2>
+        </div>
+        <div
+          class="each-assets"
+          v-for="asset in cardList"
+          :key=asset.cardId
+        >
+          <v-card class="each-asset-box">
+            <img src="../assets/img/kard.png" alt="">
+            <div class="asset-name">
+              <h4>{{asset.cardName}}</h4>
+              <span>{{asset.cardNo}}</span>
+            </div>
+            <div>
+              <button
+                class="toggle-background card-toggle"
+                @click="toggling(asset.cardId, 'card')"
+              >
+                <div class="toggle-circle" :class="{ 'active': asset.useYn === 'Y' }"></div>
+              </button>
+            </div>
+          </v-card>
+        </div>
       </div>
     </div>
     <div v-else class="empty-asset">
@@ -71,19 +90,45 @@ export default {
   name: 'Assets',
   data() {
     return {
-      toggleOn: false,
-      money: '1,500',
-      bookList: [],
+      toggleOn: [{
+        tog: 'Y',
+      }],
+      accountList: [],
+      isAccountList: false,
       cardList: [],
+      isCardList: false,
+      chk: [],
       connect: true,
       showBtn: false,
       lastScrollPosition: 0,
     };
   },
+  computed: {
+    totalMoney: function () {
+      const totalAccountVal = this.accountList.reduce((accVal, item) => {
+        if (item.useYn === 'Y') {
+          accVal += item.balAmt;
+        }
+        return accVal;
+      }, 0);
+
+      return totalAccountVal.toLocaleString();
+    },
+  },
   async mounted() {
     window.addEventListener('scroll', this.onScroll);
-    const response = await this.$axios.get(api.assetUrl);
-    console.log(response);
+    try {
+      const accountResponse = await this.$axios.get(api.fetchAllAccountListUrl);
+      const cardResponse = await this.$axios.get(api.fetchAllCardListUrl);
+
+      this.accountList = accountResponse.data;
+      this.cardList = cardResponse.data;
+      console.log(this.cardList);
+    } catch (error) {
+      this.$router.push({
+        name: 'Error',
+      });
+    }
   },
   beforeDestroy () {
     window.removeEventListener('scroll', this.onScroll);
@@ -101,9 +146,32 @@ export default {
         this.showBtn = !this.showBtn;
       }
     },
-    toggling() {
-      console.log('h');
-      this.toggleOn = !this.toggleOn;
+    toggling(id, category) {
+      if (category === 'account') {
+        this.accountList.forEach(account => {
+          if (account.accountId === id) {
+            account.useYn === 'Y' ? account.useYn = 'N' : account.useYn = 'Y';
+            try {
+              this.$axios.put(api.accountToggleUrl, account);
+            } catch (error) {
+              this.$router.push({
+                name: 'Error',
+              });
+            }
+          }
+        });
+      } else {
+        this.cardList.forEach(card => {
+          card.useYn === 'Y' ? card.useYn = 'N' : card.useYn = 'Y';
+          try {
+            this.$axios.put(api.cardToggleUrl, card);
+          } catch (error) {
+            this.$router.push({
+              name: 'Error',
+            });
+          }
+        });
+      }
     },
   },
 };
@@ -120,6 +188,8 @@ export default {
 }
 
 .travel-asset-box {
+  width: 80vw;
+  min-width: 300px;
   margin: 1rem;
   padding: 1.5rem;
 }
@@ -138,8 +208,9 @@ export default {
 
 .each-asset-box {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  align-items: center;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  min-width: 300px;
+  width: 80vw;
   padding: 1rem;
   margin: .5rem 1rem;
 }
@@ -202,5 +273,32 @@ export default {
 
 .category{
   margin-left: 1rem;
+}
+
+.category.no-data {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.card-section {
+  margin-top: 2rem;
+}
+
+.asset-name {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: .9rem;
+}
+
+.asset-name span {
+  font-size: .65rem;
+  color: gray;
+}
+
+.toggle-background.card-toggle {
+  margin-top: auto;
 }
 </style>

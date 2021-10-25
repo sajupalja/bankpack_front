@@ -18,20 +18,19 @@
     <div class="review-list-box">
       <h3 class="review-list-title">최근 작성 후기</h3>
       <div
-        v-for="item in reviewItems"
-        :key="item.id"
+        v-for="review in reviewItems"
+        :key="review.trvlId"
       >
         <router-link
           class="router-link"
-          :to="{ name: 'ReviewInfo', params:{ reviewId: item.id} }"
+          :to="{ name: 'ReviewInfo', params:{ reviewId: review.trvlId } }"
         >
           <v-card class="review">
-            <img v-if="item.thumbnail" :src="item.thumbnail" alt="" class="thumbnail-img">
-            <div v-else class="thumbnail-img"></div>
+            <img src="/" alt="" class="thumbnail-img">
             <div class="review-info">
-              <h3>{{item.title}}</h3>
-              <p>{{item.date}}</p>
-              <p>{{item.writer}}</p>
+              <h3>{{review.trvlName}}</h3>
+              <p>{{review.trvlEndDt.slice(0,10)}}</p>
+              <p>{{review.userName}}</p>
             </div>
           </v-card>
         </router-link>
@@ -41,20 +40,25 @@
 </template>
 
 <script>
+import api from '../api/api';
+
 export default {
   name: 'ReviewList',
   data () {
     return {
-      reviewItems: [
-        {
-          id: 1, title: '프라하 여행', thumbnail: 'https://image.kkday.com/v2/image/get/w_960%2Cc_fit%2Cq_55%2Ct_webp/s1.kkday.com/product_22175/20200403063015_QVE1e/jpg', date: '2021-02-03', writer: '하얀족제비',
-        }, {
-          id: 2, title: '미국 여행', thumbnail: '', date: '2021-02-03', writer: '까만 족제비',
-        }, {
-          id: 3, title: '런던 여행', thumbnail: '', date: '2021-02-03', writer: '무지개 족제비',
-        },
-      ],
+      reviewItems: [],
     };
+  },
+  async mounted () {
+    try {
+      const fetchReviewData = await this.$axios.get(api.fetchAllReviewsUrl);
+      this.reviewItems = fetchReviewData.data;
+    } catch (error) {
+      this.$router.push({
+        name: 'Error',
+      });
+    }
+
   },
 };
 </script>
@@ -74,6 +78,7 @@ export default {
 .review-list {
   padding-bottom: 2rem;
   background-color: var(--background);
+  height: 92vh;
 }
 
 .review-list-title {
@@ -97,7 +102,8 @@ export default {
 }
 
 .review-info > p:nth-child(2) {
-  font-size: .8rem;
+    color: gray;
+    font-size: .5rem;
 }
 
 .thumbnail-img {

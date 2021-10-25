@@ -12,4 +12,7 @@ export default {
 
   // reviews
   fetchAllReviewsUrl: '/travel/reviews',
+
+  // recommendationDetail
+  recommendationDetail : '/travel/destination',
 };

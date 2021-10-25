@@ -61,12 +61,6 @@ export default {
   padding: 1rem;
   align-items: center;
   cursor: pointer;
-  transition: .2s ease;
-}
-
-.review:hover {
-  background-color: var(--shadow);
-  transform: scale(1.05);
 }
 
 .review-info {

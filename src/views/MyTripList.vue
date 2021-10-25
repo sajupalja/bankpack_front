@@ -19,8 +19,8 @@
               alt="thumbnail"
             >
             <div class="my-trip-card-content">
-              <div class="my-trip-card-title">{{ item.trvlName }}</div>
-              <div class="my-trip-card-date"> {{ item.trvlStartDt }} - {{ item.trvlEndDt }} </div>
+              <div class="my-trip-card-title">{{ item.cntryName }} {{ item.cityName }}</div>
+              <div class="my-trip-card-date"> {{ item.trvlStartDt | moment('YYYY.MM.DD') }} - {{ item.trvlEndDt | moment('YYYY.MM.DD') }} </div>
             </div>
           </div>
         </router-link>
@@ -30,44 +30,24 @@
 </template>
 
 <script>
+import api from '../api/api.js';
+
 export default {
   name: 'MyTripList',
   data() {
     return {
-      tripItems: [
-        {
-          trvlId: 1,
-          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          trvlName: '프랑스 파리',
-          trvlStartDt: '2021.11.27',
-          trvlEndDt: '2021.12.2',
-        }, {
-          trvlId: 1,
-          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          trvlName: '일본 오사카',
-          trvlStartDt: '2021.11.27',
-          trvlEndDt: '2021.12.2',
-        }, {
-          trvlId: 1,
-          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          trvlName: '독일 베를린',
-          trvlStartDt: '2021.11.27',
-          trvlEndDt: '2021.12.2',
-        }, {
-          trvlId: 1,
-          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          trvlName: '호주 시드니',
-          trvlStartDt: '2021.11.27',
-          trvlEndDt: '2021.12.2',
-        }, {
-          trvlId: 1,
-          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          trvlName: '미국 뉴욕',
-          trvlStartDt: '2021.11.27',
-          trvlEndDt: '2021.12.2',
-        },
-      ],
+      tripItems: [],
     };
+  },
+  methods: {
+    fetchMyTrips() {
+      this.$axios.get(api.myTripList)
+        .then(res => this.tripItems = res.data)
+        .catch(err => console.error(err));
+    },
+  },
+  mounted() {
+    this.fetchMyTrips();
   },
 };
 </script>

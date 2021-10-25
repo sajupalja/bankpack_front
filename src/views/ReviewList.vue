@@ -3,19 +3,24 @@
     <div class="search-input-box">
       <v-text-field
         solo
-        label="search"
+        hide-details
+        label="후기를 검색해보세요"
         class="search-input"
       ></v-text-field>
       <v-icon
         large
-        class="search-icon">
-      mdi-magnify
+        class="search-icon"
+      >
+        mdi-magnify
       </v-icon>
     </div>
+
     <div class="review-list-box">
+      <h3 class="review-list-title">최근 작성 후기</h3>
       <div
         v-for="item in reviewItems"
-        :key="item.id">
+        :key="item.id"
+      >
         <router-link
           class="router-link"
           :to="{ name: 'ReviewInfo', params:{ reviewId: item.id} }"
@@ -24,7 +29,7 @@
             <img v-if="item.thumbnail" :src="item.thumbnail" alt="" class="thumbnail-img">
             <div v-else class="thumbnail-img"></div>
             <div class="review-info">
-              <h2>{{item.title}}</h2>
+              <h3>{{item.title}}</h3>
               <p>{{item.date}}</p>
               <p>{{item.writer}}</p>
             </div>
@@ -55,9 +60,24 @@ export default {
 </script>
 
 <style scoped>
+.search-input-box {
+  margin: 20px;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
 .review-list {
-  height: 100%;
+  padding-bottom: 2rem;
   background-color: var(--background);
+}
+
+.review-list-title {
+  margin-left: 1rem;
 }
 
 .review {
@@ -77,18 +97,7 @@ export default {
 }
 
 .review-info > p:nth-child(2) {
-  font-size: .5rem;
-}
-
-.search-input-box {
-  margin: 20px;
-  position: relative;
-}
-
-.search-icon {
-  position: absolute;
-  top: 5px;
-  right: 10px;
+  font-size: .8rem;
 }
 
 .thumbnail-img {

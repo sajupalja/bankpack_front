@@ -88,6 +88,7 @@ export default {
   margin: 1rem 0;
   background-color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: var(--card-border-radius);
 }
 
 .my-trip-card:hover {

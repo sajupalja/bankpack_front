@@ -113,6 +113,7 @@ export default {
   background-color: white;
   padding: 1rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: var(--card-border-radius);
 }
 
 .budget-card-header {
@@ -157,6 +158,7 @@ export default {
 .my-trip-card {
   background-color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: var(--card-border-radius);
 }
 
 .my-trip-card-header {

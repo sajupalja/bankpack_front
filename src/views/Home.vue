@@ -1,7 +1,11 @@
 <template>
   <div class="home">
     <div class="home-header">
-      <h2>여기는 배너...?</h2>
+      <img
+        class="ad-img"
+        src="../assets/img/ad_img.png"
+        alt="ad_image"
+      >
     </div>
 
     <v-container class="home-body">
@@ -10,7 +14,7 @@
           여행 예산
         </div>
         <div class="budget-card-body">
-          <span class="travel-budget">{{ travelBudget }}원</span>
+          <span class="travel-budget">{{ travelBudget.toLocaleString({style:'currency'}) }}원</span>
           <span
             class="more-btn"
             @click="goToAssets"
@@ -29,7 +33,11 @@
 
       <div class="my-trip-card">
         <div class="my-trip-card-header">
-          나의 여행지 목록
+          <span>나의 여행지 목록</span>
+          <span
+            class="more-btn"
+            @click="goToMyTrip"
+          >더보기</span>
         </div>
 
         <div class="my-trip-list">
@@ -45,8 +53,8 @@
               alt="thumbnail"
             >
             <div class="my-trip-item-content">
-              <div class="my-trip-item-title">{{ item.trvlName }}</div>
-              <div class="my-trip-item-date"> {{ item.trvlStartDt }} - {{ item.trvlEndDt }} </div>
+              <div class="my-trip-item-title">{{ item.cntryName }} {{ item.cityName }}</div>
+              <div class="my-trip-item-date"> {{ item.trvlStartDt | moment('YYYY.MM.DD') }} - {{ item.trvlEndDt | moment('YYYY.MM.DD') }} </div>
             </div>
             <v-spacer></v-spacer>
             <div class="my-trip-item-arrow">
@@ -60,26 +68,14 @@
 </template>
 
 <script>
+import api from '../api/api.js';
+
 export default {
   name: 'Home',
   data() {
     return {
       travelBudget: '1,000,000,000',
-      tripItems: [
-        {
-          trvlId: 1,
-          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          trvlName: '프랑스 파리',
-          trvlStartDt: '2021.11.27',
-          trvlEndDt: '2021.12.2',
-        }, {
-          trvlId: 1,
-          imgUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-          trvlName: '일본 오사카',
-          trvlStartDt: '2021.11.27',
-          trvlEndDt: '2021.12.2',
-        },
-      ],
+      tripItems: [],
     };
   },
   methods: {
@@ -91,6 +87,18 @@ export default {
       // eslint-disable-next-line object-curly-newline
       this.$router.push({ name: 'Assets' });
     },
+    goToMyTrip() {
+      // eslint-disable-next-line object-curly-newline
+      this.$router.push({ name: 'MyTripList' });
+    },
+    fetchRecentTrips() {
+      this.$axios.get(api.myTripList)
+        .then(res => this.tripItems = res.data.slice(0, 5))
+        .catch(err => console.error(err));
+    },
+  },
+  mounted() {
+    this.fetchRecentTrips();
   },
 };
 </script>
@@ -102,11 +110,12 @@ export default {
 }
 
 .home-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 150px;
-  background-color: var(--secondary);
+  background-color: var(--background);
+}
+
+.ad-img {
+  object-fit: cover;
+  width: 100%;
 }
 
 .budget-card {
@@ -136,6 +145,7 @@ export default {
 
 .more-btn {
   font-size: 0.8rem;
+  font-weight: 500;
 }
 
 .more-btn:hover {
@@ -165,6 +175,9 @@ export default {
   font-weight: 600;
   font-size: 1.4rem;
   padding: 2rem 1rem 1.2rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .my-trip-list-item {

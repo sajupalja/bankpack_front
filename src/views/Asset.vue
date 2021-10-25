@@ -65,7 +65,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../api/api';
+
 export default {
   name: 'Assets',
   data() {
@@ -79,9 +80,9 @@ export default {
       lastScrollPosition: 0,
     };
   },
-  mounted() {
+  async mounted() {
     window.addEventListener('scroll', this.onScroll);
-    const response = axios.get('http://bankpack.169.56.174.130.nip.io/spending/account/list?userId=1');
+    const response = await this.$axios.get(api.assetUrl);
     console.log(response);
   },
   beforeDestroy () {
@@ -95,6 +96,10 @@ export default {
       }
       this.showBtn = currentScrollPosition > this.lastScrollPosition;
       this.lastScrollPosition = currentScrollPosition;
+
+      if((window.innerHeight + window.scrollY) === document.body.offsetHeight) {
+        this.showBtn = !this.showBtn;
+      }
     },
     toggling() {
       console.log('h');

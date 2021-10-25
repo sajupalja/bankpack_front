@@ -6,6 +6,11 @@
         label="search"
         class="search-input"
       ></v-text-field>
+      <v-icon
+        large
+        class="search-icon">
+      mdi-magnify
+      </v-icon>
     </div>
     <div class="review-list-box">
       <div
@@ -21,7 +26,7 @@
             <div class="review-info">
               <h2>{{item.title}}</h2>
               <p>{{item.date}}</p>
-              <p>{{item.desc}}</p>
+              <p>{{item.writer}}</p>
             </div>
           </v-card>
         </router-link>
@@ -37,11 +42,11 @@ export default {
     return {
       reviewItems: [
         {
-          id: 1, title: '프라하 여행', thumbnail: 'https://image.kkday.com/v2/image/get/w_960%2Cc_fit%2Cq_55%2Ct_webp/s1.kkday.com/product_22175/20200403063015_QVE1e/jpg', date: '2021-02-03', desc: 'no contents',
+          id: 1, title: '프라하 여행', thumbnail: 'https://image.kkday.com/v2/image/get/w_960%2Cc_fit%2Cq_55%2Ct_webp/s1.kkday.com/product_22175/20200403063015_QVE1e/jpg', date: '2021-02-03', writer: '하얀족제비',
         }, {
-          id: 2, title: '미국 여행', thumbnail: '', date: '2021-02-03', desc: 'no contents',
+          id: 2, title: '미국 여행', thumbnail: '', date: '2021-02-03', writer: '까만 족제비',
         }, {
-          id: 3, title: '런던 여행', thumbnail: '', date: '2021-02-03', desc: 'no contents',
+          id: 3, title: '런던 여행', thumbnail: '', date: '2021-02-03', writer: '무지개 족제비',
         },
       ],
     };
@@ -83,6 +88,13 @@ export default {
 
 .search-input-box {
   margin: 20px;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  top: 5px;
+  right: 10px;
 }
 
 .thumbnail-img {

@@ -69,7 +69,7 @@ export default {
       avgSpending:10000,
       chartData: {
         hoverBorderWidth: 10,
-        labels: ['식비', '숙비', '교통비', '활동', '기타'],
+        labels: ['식비', '숙박비', '교통비', '활동', '기타'],
         datasets: [
           {
             label: '카테고리별 지출',
@@ -108,13 +108,13 @@ export default {
         .then(res => {
           console.log(res.data);
           this.recommendationItem = res.data;
-          // ['식비', '숙비', '교통비', '활동', '기타']
+          // ['식비', '숙박비', '교통비', '활동', '기타']
           this.chartData.datasets[0].data = [this.recommendationItem.avgFoodRate, this.recommendationItem.avgRoomRate, this.recommendationItem.avgTrffRate, this.recommendationItem.avgActRate, this.recommendationItem.avgEtcRate ];
           this.treeviewItems[0].children = [
             {
               id: 2, name: '식비', label: this.recommendationItem.avgFoodAmt,
             }, {
-              id: 3, name: '숙비', label: this.recommendationItem.avgRoomAmt,
+              id: 3, name: '숙박비', label: this.recommendationItem.avgRoomAmt,
             }, {
               id: 4, name: '교통비', label: this.recommendationItem.avgTrffAmt,
             }, {

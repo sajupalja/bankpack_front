@@ -1,4 +1,7 @@
 export default {
+  // home
+  fetchMyTripAsset: '/spending/account/budget?userId=1',
+
   // my asset
   fetchAllAccountListUrl: '/spending/account/list?userId=1',
   fetchAllCardListUrl: '/spending/card/list?userId=1',

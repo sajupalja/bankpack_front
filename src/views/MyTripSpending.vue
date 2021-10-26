@@ -261,7 +261,7 @@ export default {
       },
       chartData: {
         hoverBorderWidth: 10,
-        labels: ['식비', '숙비', '교통비', '활동', '기타'],
+        labels: ['식비', '숙박비', '교통비', '활동', '기타'],
         datasets: [
           {
             label: '카테고리별 지출',
@@ -277,7 +277,7 @@ export default {
           id: 'filterAll',
         }, {
           filterValue: 1,
-          name: '숙비',
+          name: '숙박비',
           id: 'filterRoom',
         }, {
           filterValue: 2,
@@ -303,7 +303,7 @@ export default {
       paymentDialogMode: null,
       payTypes: [
         {
-          type: '숙비',
+          type: '숙박비',
           value: 1,
         }, {
           type: '식비',

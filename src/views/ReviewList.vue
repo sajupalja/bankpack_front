@@ -40,7 +40,7 @@
             :to="{ name: 'ReviewInfo', params:{ reviewId: review.trvlId } }"
           >
             <v-card class="review">
-              <img src="/" alt="" class="thumbnail-img">
+              <img :src="review.imgUrl" alt="" class="thumbnail-img">
               <div class="review-info">
                 <h5>{{review.trvlName}}</h5>
                 <p>{{review.trvlEndDt.slice(0,10)}}</p>
@@ -133,7 +133,6 @@ export default {
 .review-list {
   padding-bottom: 2rem;
   background-color: var(--background);
-  height: 92vh;
 }
 
 .review-list-title {

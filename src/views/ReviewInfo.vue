@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="review-detail">
     <div class="header">
       <img
         class="header-img"

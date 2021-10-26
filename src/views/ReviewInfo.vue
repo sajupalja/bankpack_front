@@ -165,7 +165,7 @@ export default {
     updateChartData(info) {
       this.chartData = {
         hoverBorderWidth: 10,
-        labels: ['식비', '숙비', '교통비', '활동', '기타'],
+        labels: ['식비', '숙박비', '교통비', '활동', '기타'],
         datasets: [
           {
             label: '카테고리별 지출',

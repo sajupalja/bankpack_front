@@ -96,9 +96,23 @@ export default {
         .then(res => this.tripItems = res.data.slice(0, 5))
         .catch(err => console.error(err));
     },
+    fetchMyTripAsset() {
+      this.$axios.get(api.fetchMyTripAsset)
+        .then(res => this.travelBudget = res.data)
+        .catch(err => {
+          console.error(err);
+          this.goToErrorPage;
+        });
+    },
+    goToErrorPage() {
+      this.$router.push({
+        name: 'Error',
+      });
+    },
   },
   mounted() {
     this.fetchRecentTrips();
+    this.fetchMyTripAsset();
   },
 };
 </script>

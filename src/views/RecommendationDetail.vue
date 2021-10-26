@@ -19,7 +19,7 @@
       ></pie-chart>
     </div>
     <h3 class="body-title">
-      <span>평균지출비용</span> <v-spacer></v-spacer><span>{{parseInt(avgSpending).toLocaleString({style:'currency'})}} 원</span>
+      <span>평균지출비용</span> <v-spacer></v-spacer><span>{{parseInt(recommendationItem.avgTotalPayAmt).toLocaleString({style:'currency'})}} 원</span>
     </h3>
     <v-treeview :items="treeviewItems" open-on-click>
       <template  slot="label" slot-scope="props">
@@ -45,7 +45,7 @@
             <div class="review-info">
               <h3>{{item.trvlName}}</h3>
               <p>{{item.trvlStartDt| moment('YYYY년 MM월 DD일') }} - {{item.trvlEndDt| moment('YYYY년 MM월 DD일') }}</p>
-              <p>{{item.trvlEndDt| moment('YYYY년 MM월 DD일') }}</p>
+              <!--<p>{{item.trvlEndDt| moment('YYYY년 MM월 DD일') }}</p>-->
             </div>
           </v-card>
         </router-link>
@@ -123,8 +123,6 @@ export default {
               id: 6, name: '기타', label: this.recommendationItem.avgEtcAmt,
             },
           ];
-          this.avgSpending = this.recommendationItem.avgFoodAmt + this.recommendationItem.avgRoomAmt +
-          this.recommendationItem.avgTrffAmt+ this.recommendationItem.avgActAmt + this.recommendationItem.avgEtcAmt;
         })
         .catch(err => console.error(err));
     },

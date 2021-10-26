@@ -50,7 +50,7 @@ export default {
   name: 'Recommendation',
   data() {
     return {
-      username: '지누무주',
+      username: '지누무주2',
       recommendationItems: [
       ],
     };

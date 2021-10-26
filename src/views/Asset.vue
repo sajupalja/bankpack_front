@@ -192,13 +192,15 @@ export default {
         });
       } else {
         this.cardList.forEach(card => {
-          card.useYn === 'Y' ? card.useYn = 'N' : card.useYn = 'Y';
-          try {
-            this.$axios.put(api.cardToggleUrl, card);
-          } catch (error) {
-            this.$router.push({
-              name: 'Error',
-            });
+          if (card.cardId === id) {
+            card.useYn === 'Y' ? card.useYn = 'N' : card.useYn = 'Y';
+            try {
+              this.$axios.put(api.accountToggleUrl, card);
+            } catch (error) {
+              this.$router.push({
+                name: 'Error',
+              });
+            }
           }
         });
       }
@@ -215,6 +217,7 @@ export default {
   flex-direction: column;
   position: relative;
   align-items: center;
+  padding-bottom: 3rem;
 }
 
 .travel-asset-box {

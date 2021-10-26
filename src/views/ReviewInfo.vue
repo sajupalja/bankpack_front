@@ -211,6 +211,7 @@ export default {
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
   padding: 1.6rem 1rem 1rem 1rem;
+  height: 100%;
 }
 
 .title > h5 {

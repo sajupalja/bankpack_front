@@ -133,6 +133,7 @@ export default {
 .review-list {
   padding-bottom: 2rem;
   background-color: var(--background);
+  height: 100%;
 }
 
 .review-list-title {

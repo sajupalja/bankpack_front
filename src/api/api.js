@@ -9,14 +9,17 @@ export default {
   myTripList:'/travel/reviews/user/1',
   myTripDetail: '/travel/reviews/',
   tripPaymentList: '/spending/travel/list/',
+  tripPayment: '/spending/travel',
 
   // reviews
   fetchAllReviewsUrl: '/travel/reviews',
   searchReviewsUrl: '/travel/reviews/detail/',
 
+
   // reviewDetail
   fetchReviewUrl: '/travel/reviews/',
 
-  // recommendationDetail
+  // recommendation
+  recommendResult : '/travel/recommend/result',
   recommendationDetail : '/travel/destination',
 };

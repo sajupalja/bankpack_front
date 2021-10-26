@@ -3,7 +3,7 @@
     <div class="header">
       <img
         class="header-img"
-        src="https://lp-cms-production.imgix.net/2021-03/shutterstock_304631102.jpg?auto=format&fit=crop&sharp=10&vib=20&ixlib=react-8.6.4&w=850"
+        src="recommendationItem.imgUrl"
         alt="header-image"
       >
     </div>
@@ -19,7 +19,7 @@
       ></pie-chart>
     </div>
     <h3 class="body-title">
-      <span>평균지출비용</span> <v-spacer></v-spacer><span>{{parseInt(recommendationItem.avgSpending).toLocaleString({style:'currency'})}} 원</span>
+      <span>평균지출비용</span> <v-spacer></v-spacer><span>{{parseInt(recommendationItem.avgTotalPayAmt).toLocaleString({style:'currency'})}} 원</span>
     </h3>
     <v-treeview :items="treeviewItems" open-on-click>
       <template  slot="label" slot-scope="props">
@@ -40,12 +40,12 @@
           :to="{ name: 'ReviewInfo', params:{ reviewId: item.trvlId} }"
         >
           <v-card class="review">
-            <img v-if="item.thumbnail" :src="item.thumbnail" alt="" class="thumbnail-img">
+            <img v-if="item.imgUrl" :src="item.imgUrl" alt="" class="thumbnail-img">
             <div v-else class="thumbnail-img"></div>
             <div class="review-info">
               <h3>{{item.trvlName}}</h3>
-              <p>{{item.trvlStartDt| moment('YYYY년 MM월 DD일') }}</p>
-              <p>{{item.trvlEndDt| moment('YYYY년 MM월 DD일') }}</p>
+              <p>{{item.trvlStartDt| moment('YYYY년 MM월 DD일') }} - {{item.trvlEndDt| moment('YYYY년 MM월 DD일') }}</p>
+              <!--<p>{{item.trvlEndDt| moment('YYYY년 MM월 DD일') }}</p>-->
             </div>
           </v-card>
         </router-link>
@@ -65,13 +65,8 @@ export default {
   },
   data() {
     return {
-      recommendationItem:{
-        cntryName:'',
-        cityName:'',
-        avgSpending : '100000',
-        travels : [],
-      },
-
+      recommendationItem:{},
+      avgSpending:10000,
       chartData: {
         hoverBorderWidth: 10,
         labels: ['식비', '숙비', '교통비', '활동', '기타'],
@@ -97,29 +92,10 @@ export default {
         id: 1,
         name:'카테고리별 평균지출 금액',
         children: [
-          {
-            id: 2, name: '식비', label: 'xx',
-          }, {
-            id: 3, name: '숙비', label: 'xx', //this.chartData.labels[1],
-          }, {
-            id: 4, name: '교통비', label: 'xx', //this.chartData.labels[2],
-          }, {
-            id: 5, name: '활동', label: 'xx', //this.chartData.labels[3],
-          }, {
-            id: 6, name: '기타', label: 'xx', //this.chartData.labels[4],
-          },
+
         ],
       }],
 
-      reviewItems: [
-        {
-          id: 1, title: '프라하 여행', thumbnail: 'https://image.kkday.com/v2/image/get/w_960%2Cc_fit%2Cq_55%2Ct_webp/s1.kkday.com/product_22175/20200403063015_QVE1e/jpg', date: '2021-02-03', desc: 'no contents',
-        }, {
-          id: 2, title: '미국 여행', thumbnail: '', date: '2021-02-03', desc: 'no contents',
-        }, {
-          id: 3, title: '런던 여행', thumbnail: '', date: '2021-02-03', desc: 'no contents',
-        },
-      ],
     };
   },
   methods: {
@@ -132,6 +108,21 @@ export default {
         .then(res => {
           console.log(res.data);
           this.recommendationItem = res.data;
+          // ['식비', '숙비', '교통비', '활동', '기타']
+          this.chartData.datasets[0].data = [this.recommendationItem.avgFoodRate, this.recommendationItem.avgRoomRate, this.recommendationItem.avgTrffRate, this.recommendationItem.avgActRate, this.recommendationItem.avgEtcRate ];
+          this.treeviewItems[0].children = [
+            {
+              id: 2, name: '식비', label: this.recommendationItem.avgFoodAmt,
+            }, {
+              id: 3, name: '숙비', label: this.recommendationItem.avgRoomAmt,
+            }, {
+              id: 4, name: '교통비', label: this.recommendationItem.avgTrffAmt,
+            }, {
+              id: 5, name: '활동', label: this.recommendationItem.avgActAmt,
+            }, {
+              id: 6, name: '기타', label: this.recommendationItem.avgEtcAmt,
+            },
+          ];
         })
         .catch(err => console.error(err));
     },
@@ -162,6 +153,7 @@ export default {
     color: whitesmoke;
     text-shadow:1px 1px 1px #000;
     top: -4vh;
+    margin : 5px;
 }
 .body-content {
   position: relative;

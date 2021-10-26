@@ -36,7 +36,7 @@
         class="payment-history-card"
         v-for="item in filteredPaymentHistory"
         :key="item.trvlPayId"
-        @click="goToPaymentDetail"
+        @click="goToPaymentDetail(item)"
       >
         <div
           class="payment-history-icon"
@@ -54,17 +54,186 @@
         </div>
       </div>
     </div>
-    <v-btn
-      class="payment-add-btn"
-      color="primary"
-      :to="{ name: 'Payment' }"
-      fixed
-      bottom
-      right
-      fab
+
+    <!-- 결제내역 추가 팝업 -->
+    <v-dialog
+      v-model="paymentDialog"
+      persistent
     >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          class="payment-add-btn"
+          color="primary"
+          v-bind="attrs"
+          v-on="on"
+          fixed
+          bottom
+          right
+          fab
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </template>
+
+      <v-card
+        class="payment-popup"
+        height="100%"
+      >
+        <div class="payment-popup-title">결제 내역</div>
+        <v-container>
+          <v-row>
+            <!-- 결제 분류 -->
+            <v-col
+              class="form-label-col"
+              cols="3"
+            >
+              <label class="form-label">분류</label>
+            </v-col>
+            <v-col
+              cols="9"
+              class="form-field-col"
+            >
+              <v-select
+                :items="payTypes"
+                item-text="type"
+                item-value="value"
+                v-model="paymentInfo.payType"
+                label="분류 선택하세요"
+                hide-details
+                solo
+              ></v-select>
+            </v-col>
+
+            <!-- 결제 금액 -->
+            <v-col
+              class="form-label-col"
+              cols="3"
+            >
+              <label class="form-label">금액</label>
+            </v-col>
+            <v-col
+              cols="9"
+              class="form-field-col"
+            >
+              <v-text-field
+                label="금액 입력하세요"
+                v-model="paymentInfo.payAmt"
+                hide-details
+                solo
+              ></v-text-field>
+            </v-col>
+
+            <!-- 결제 내용 -->
+            <v-col
+              class="form-label-col"
+              cols="3"
+            >
+              <label class="form-label">내용</label>
+            </v-col>
+            <v-col
+              cols="9"
+              class="form-field-col"
+            >
+              <v-text-field
+                label="내용 입력하세요"
+                v-model="paymentInfo.payName"
+                hide-details
+                solo
+              ></v-text-field>
+            </v-col>
+
+            <!-- 결제 날짜 -->
+            <v-col
+              class="form-label-col"
+              cols="3"
+            >
+              <label class="form-label">날짜</label>
+            </v-col>
+            <v-col
+              cols="9"
+              class="form-field-col"
+            >
+            <v-menu
+              v-model="dateMenu"
+              :close-on-content-click="true"
+              :nudge-left="30"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="paymentInfo.payDt"
+                  prepend-inner-icon="mdi-calendar"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                  solo
+                  label="날짜 선택하세요"
+                  hide-details
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="paymentInfo.payDt"
+                color="primary"
+                no-title
+                scrollable
+              >
+              </v-date-picker>
+            </v-menu>
+            </v-col>
+
+            <!-- 결제 수단 -->
+            <v-col
+              class="form-label-col"
+              cols="3"
+            >
+              <label class="form-label">결제수단</label>
+            </v-col>
+            <v-col
+              cols="9"
+              class="form-field-col"
+            >
+              <v-select
+                :items="payMethods"
+                item-text="method"
+                item-value="value"
+                v-model="paymentInfo.payMethod"
+                label="수단 선택하세요"
+                hide-details
+                solo
+              ></v-select>
+            </v-col>
+          </v-row>
+        </v-container>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            @click="closePaymentDialog"
+          >
+            닫기
+          </v-btn>
+          <v-btn
+            color="error"
+            text
+            @click="deletePayment(paymentInfo.trvlPayId)"
+            v-if="paymentDialogMode === 'edit'"
+          >
+            삭제
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+            @click="savePayment"
+          >
+            저장
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </div>
 </template>
 
@@ -130,6 +299,44 @@ export default {
       ],
       paymentHistoryItem: [],
       filter: null,
+      paymentDialog: false,
+      paymentDialogMode: null,
+      payTypes: [
+        {
+          type: '숙비',
+          value: 1,
+        }, {
+          type: '식비',
+          value: 2,
+        }, {
+          type: '교통비',
+          value: 3,
+        }, {
+          type: '활동비',
+          value: 4,
+        }, {
+          type: '기타비',
+          value: 5,
+        },
+      ],
+      dateMenu: false,
+      payMethods: [
+        {
+          method: '현금',
+          value: 0,
+        }, {
+          method: '카드',
+          value: 1,
+        },
+      ],
+      paymentInfo: {
+        trvlPayId: null,
+        payType: null,
+        payAmt: null,
+        payName: null,
+        payDt: null,
+        payMethod: null,
+      },
     };
   },
   computed: {
@@ -180,15 +387,57 @@ export default {
     },
     fetchPaymentList() {
       this.$axios.get(api.tripPaymentList + this.tripInfo.trvlId)
-        .then(res => {
-          console.log(res.data);
-          this.paymentHistoryItem = res.data;
+        .then(res => this.paymentHistoryItem = res.data)
+        .catch(err => console.error(err));
+    },
+    goToPaymentDetail(paymentItem) {
+      this.paymentDialog = true;
+      this.paymentInfo.trvlPayId = paymentItem.trvlPayId;
+      this.paymentInfo.payType = paymentItem.payType;
+      this.paymentInfo.payAmt = paymentItem.payAmt;
+      this.paymentInfo.payName = paymentItem.payName;
+      this.paymentInfo.payDt = paymentItem.payDt;
+      this.paymentInfo.payMethod = paymentItem.payMethod ? 1 : 0;
+      this.paymentDialogMode = 'edit';
+    },
+    savePayment() {
+      this.paymentInfo.userId = 1;
+      this.paymentInfo.trvlId = this.tripInfo.trvlId;
+      if (this.paymentDialogMode === 'edit') {
+        this.$axios.put(api.tripPayment, this.paymentInfo)
+          .then(() => {
+            this.closePaymentDialog();
+            this.fetchPaymentList();
+          })
+          .catch(err => console.error(err));
+      } else {
+        this.$axios.post(api.tripPayment, this.paymentInfo)
+          .then(() => {
+            this.closePaymentDialog();
+            this.fetchPaymentList();
+          })
+          .catch(err => console.error(err));
+      }
+    },
+    deletePayment(id) {
+      this.$axios.delete(api.tripPayment + `/${id}`)
+        .then(() => {
+          this.closePaymentDialog();
+          this.fetchPaymentList();
         })
         .catch(err => console.error(err));
     },
-    goToPaymentDetail() {
-      // eslint-disable-next-line object-curly-newline
-      this.$router.push({ name: 'Payment' });
+    closePaymentDialog() {
+      this.paymentDialog = false;
+      this.paymentInfo = {
+        trvlPayId: null,
+        payType: null,
+        payAmt: null,
+        payName: null,
+        payDt: null,
+        payMethod: null,
+      };
+      this.paymentDialogMode = null;
     },
   },
   mounted() {
@@ -306,5 +555,36 @@ export default {
 
 .payment-add-btn {
   margin: 0.6rem;
+}
+
+.payment-popup {
+  padding: 1.6rem 1.2rem 1rem 1.2rem;
+}
+
+.payment-popup-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.form-label-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0.2rem;
+  padding-right: 0;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.form-field-col {
+  padding-right: 0;
+  padding-left: 0.4rem;
+}
+
+.v-card__actions {
+  padding: 0 !important;
 }
 </style>

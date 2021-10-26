@@ -5,7 +5,7 @@
       <div class="current-spending-amount">{{ tripInfo.totalPayAmt.toLocaleString({style:'currency'}) }}원 <span class="total-budget-amount">/ {{ tripInfo.budgetAmt.toLocaleString({style:'currency'}) }}원</span></div>
       <v-progress-linear
         class="spending-progress-bar"
-        :value="progress"
+        :value="spendingPercentage"
         height="25"
       >
         <span class="progress-percentage">{{ spendingPercentage }}%</span>
@@ -24,13 +24,17 @@
           class="payment-history-filter"
           v-for="filter in paymentHistoryFilters"
           :key="filter.name"
+          @click="changeFilter(filter)"
         >
-          <span class="filter-btn">{{ filter.name }}</span>|
+          <span
+            class="filter-btn"
+            :id="filter.id"
+          >{{ filter.name }}</span>|
         </div>
       </div>
       <div
         class="payment-history-card"
-        v-for="item in paymentHistoryItem"
+        v-for="item in filteredPaymentHistory"
         :key="item.trvlPayId"
         @click="goToPaymentDetail"
       >
@@ -76,9 +80,6 @@ export default {
   props: ['tripInfo'],
   data() {
     return {
-      progress: 80,
-      currentSpending: '160만원',
-      totalBudget: '200만원',
       chartOptions: {
         cutoutPercentage: 0,
         legend: {
@@ -102,25 +103,51 @@ export default {
       },
       paymentHistoryFilters: [
         {
+          filterValue: null,
           name: '전체',
+          id: 'filterAll',
         }, {
-          name: '식비',
-        }, {
+          filterValue: 1,
           name: '숙비',
+          id: 'filterRoom',
         }, {
+          filterValue: 2,
+          name: '식비',
+          id: 'filterFood',
+        }, {
+          filterValue: 3,
           name: '교통비',
+          id: 'filterTransportation',
         }, {
+          filterValue: 4,
           name: '활동비',
+          id: 'filterActivity',
         }, {
+          filterValue: 5,
           name: '기타비',
+          id: 'filterEtc',
         },
       ],
       paymentHistoryItem: [],
+      filter: null,
     };
   },
   computed: {
     spendingPercentage() {
       return (this.tripInfo.totalPayAmt / this.tripInfo.budgetAmt * 100).toFixed(2);
+    },
+    filteredPaymentHistory() {
+      let result = [];
+      if (this.filter === null) {
+        return this.paymentHistoryItem;
+      } else {
+        this.paymentHistoryItem.forEach(item => {
+          if (item.payType === this.filter) {
+            result.push(item);
+          }
+        });
+        return result;
+      }
     },
   },
   methods: {
@@ -144,6 +171,13 @@ export default {
         return '카드';
       }
     },
+    changeFilter(filter) {
+      this.filter = filter.filterValue;
+      const currentFilter = document.getElementsByClassName('active-filter')[0];
+      currentFilter.classList.remove('active-filter');
+      const newFilter = document.getElementById(filter.id);
+      newFilter.classList.add('active-filter');
+    },
     fetchPaymentList() {
       this.$axios.get(api.tripPaymentList + this.tripInfo.trvlId)
         .then(res => {
@@ -159,6 +193,8 @@ export default {
   },
   mounted() {
     this.fetchPaymentList();
+    const filterAll = document.getElementById('filterAll');
+    filterAll.classList.add('active-filter');
   },
 };
 </script>
@@ -213,6 +249,11 @@ export default {
 
 .filter-btn:active {
   color: var(--grey);
+}
+
+.active-filter {
+  color: var(--primary);
+  font-weight: 600;
 }
 
 .payment-history-card {

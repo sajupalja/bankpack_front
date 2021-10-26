@@ -19,6 +19,7 @@
         dense
       >
         <v-timeline-item
+          class="timeline-item"
           v-for="review in tripInfo.trvVO"
           :key="review.trvlRevwId"
           small
@@ -126,9 +127,11 @@ export default {
 .timeline-date {
   font-size: 0.8rem;
   color: var(--grey);
+  margin-left: 0.6rem;
 }
 
 .timeline-card {
+  margin-left: 0.6rem;
   padding: 1rem 0.8rem 0.4rem 0.8rem;
   background-color: white;
   box-shadow: var(--box-shadow);

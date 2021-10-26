@@ -192,6 +192,7 @@ export default {
 .timeline-date {
   font-size: 0.8rem;
   color: var(--grey);
+  margin-left: 0.6rem;
 }
 
 .timeline-card {
@@ -199,6 +200,7 @@ export default {
   background-color: white;
   box-shadow: var(--box-shadow);
   border-radius: var(--card-border-radius);
+  margin-left: 0.6rem;
 }
 
 .timeline-card-divider {

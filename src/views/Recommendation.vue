@@ -50,7 +50,7 @@ export default {
   name: 'Recommendation',
   data() {
     return {
-      username: '지누무주',
+      username: '지누무주2',
       recommendationItems: [
         {
           cntryId: 275, cityId:256, clstrLabel:'6', cntry_name:'대한민국', city_name:'강릉', thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',

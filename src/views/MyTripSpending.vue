@@ -36,7 +36,7 @@
         class="payment-history-card"
         v-for="item in filteredPaymentHistory"
         :key="item.trvlPayId"
-        @click="goToPaymentDetail"
+        @click="goToPaymentDetail(item)"
       >
         <div
           class="payment-history-icon"
@@ -95,6 +95,9 @@
             >
               <v-select
                 :items="payTypes"
+                item-text="type"
+                item-value="value"
+                v-model="paymentInfo.payType"
                 label="분류 선택하세요"
                 hide-details
                 solo
@@ -114,6 +117,7 @@
             >
               <v-text-field
                 label="금액 입력하세요"
+                v-model="paymentInfo.payAmt"
                 hide-details
                 solo
               ></v-text-field>
@@ -132,6 +136,7 @@
             >
               <v-text-field
                 label="내용 입력하세요"
+                v-model="paymentInfo.payName"
                 hide-details
                 solo
               ></v-text-field>
@@ -149,28 +154,28 @@
               class="form-field-col"
             >
             <v-menu
-              ref="menu"
               v-model="dateMenu"
               :close-on-content-click="true"
-              :return-value.sync="date"
+              :nudge-left="30"
               transition="scale-transition"
               offset-y
               min-width="auto"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="date"
+                  v-model="paymentInfo.payDt"
                   prepend-inner-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
                   v-on="on"
                   solo
-                  label="날짜를 선택하세요"
+                  label="날짜 선택하세요"
                   hide-details
                 ></v-text-field>
               </template>
               <v-date-picker
-                v-model="date"
+                v-model="paymentInfo.payDt"
+                color="primary"
                 no-title
                 scrollable
               >
@@ -191,6 +196,9 @@
             >
               <v-select
                 :items="payMethods"
+                item-text="method"
+                item-value="value"
+                v-model="paymentInfo.payMethod"
                 label="수단 선택하세요"
                 hide-details
                 solo
@@ -203,14 +211,21 @@
           <v-spacer></v-spacer>
           <v-btn
             text
-            @click="paymentDialog = false"
+            @click="closePaymentDialog"
           >
             닫기
           </v-btn>
           <v-btn
+            color="error"
+            text
+            @click="deletePaymentItem"
+          >
+            삭제
+          </v-btn>
+          <v-btn
             color="primary"
             text
-            @click="paymentDialog = false"
+            @click="clickSavePayment"
           >
             저장
           </v-btn>
@@ -284,10 +299,42 @@ export default {
       paymentHistoryItem: [],
       filter: null,
       paymentDialog: false,
-      payTypes: ['숙비', '식비', '교통비', '활동비', '기타비'],
+      paymentDialogMode: null,
+      payTypes: [
+        {
+          type: '숙비',
+          value: 1,
+        }, {
+          type: '식비',
+          value: 2,
+        }, {
+          type: '교통비',
+          value: 3,
+        }, {
+          type: '활동비',
+          value: 4,
+        }, {
+          type: '기타비',
+          value: 5,
+        },
+      ],
       dateMenu: false,
-      date: null,
-      payMethods: ['카드', '현금'],
+      payMethods: [
+        {
+          method: '현금',
+          value: 0,
+        }, {
+          method: '카드',
+          value: 1,
+        },
+      ],
+      paymentInfo: {
+        payType: null,
+        payAmt: null,
+        payName: null,
+        payDt: null,
+        payMethod: null,
+      },
     };
   },
   computed: {
@@ -344,9 +391,33 @@ export default {
         })
         .catch(err => console.error(err));
     },
-    goToPaymentDetail() {
-      // eslint-disable-next-line object-curly-newline
-      this.$router.push({ name: 'Payment' });
+    goToPaymentDetail(paymentItem) {
+      this.paymentDialog = true;
+      this.paymentInfo.payType = paymentItem.payType;
+      this.paymentInfo.payAmt = paymentItem.payAmt;
+      this.paymentInfo.payName = paymentItem.payName;
+      this.paymentInfo.payDt = paymentItem.payDt;
+      this.paymentInfo.payMethod = paymentItem.payMethod ? 1 : 0;
+    },
+    clickSavePayment() {
+      this.paymentInfo.userId = 1;
+      this.paymentInfo.trvlId = this.tripInfo.trvlId;
+      this.$axios.post(api.tripPayment, this.paymentInfo)
+        .then(() => {
+          this.closePaymentDialog();
+          this.fetchPaymentList();
+        })
+        .catch(err => console.error(err));
+    },
+    closePaymentDialog() {
+      this.paymentDialog = false;
+      this.paymentInfo = {
+        payType: null,
+        payAmt: null,
+        payName: null,
+        payDt: null,
+        payMethod: null,
+      };
     },
   },
   mounted() {

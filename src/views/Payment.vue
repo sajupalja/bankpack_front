@@ -1,9 +1,12 @@
 <template>
   <div class="spending-form">
-    <v-card elevation="3" class="form-card">
+    <v-card
+      elevation="3"
+      class="form-card"
+    >
       <div>
         <div class="form-input-box">
-          <p>분류</p>
+          <label>분류</label>
           <select
             class="form-select"
           >
@@ -15,7 +18,7 @@
           </select>
         </div>
         <div class="form-input-box">
-          <p>금액</p>
+          <label>금액</label>
           <div class="money-input-box">
             <select class="money">
               <option value="">-</option>
@@ -26,15 +29,15 @@
           </div>
         </div>
         <div class="form-input-box">
-          <p>내용</p>
+          <label>내용</label>
           <input class="form-input" type="text">
         </div>
         <div class="form-input-box">
-          <p>날짜</p>
+          <label>날짜</label>
           <input class="form-input" type="date">
         </div>
         <div class="form-input-box">
-          <p>결제 수단</p>
+          <label>결제 수단</label>
           <select
             class="form-select"
           >
@@ -89,8 +92,15 @@ option {
   text-align: center;
 }
 
+.spending-form {
+  background-color: var(--background);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .form-card {
-  margin: 2rem;
   display: flex;
   flex-direction: column;
 }

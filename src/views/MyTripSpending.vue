@@ -218,14 +218,15 @@
           <v-btn
             color="error"
             text
-            @click="deletePaymentItem"
+            @click="deletePayment(paymentInfo.trvlPayId)"
+            v-if="paymentDialogMode === 'edit'"
           >
             삭제
           </v-btn>
           <v-btn
             color="primary"
             text
-            @click="clickSavePayment"
+            @click="savePayment"
           >
             저장
           </v-btn>
@@ -329,6 +330,7 @@ export default {
         },
       ],
       paymentInfo: {
+        trvlPayId: null,
         payType: null,
         payAmt: null,
         payName: null,
@@ -385,24 +387,40 @@ export default {
     },
     fetchPaymentList() {
       this.$axios.get(api.tripPaymentList + this.tripInfo.trvlId)
-        .then(res => {
-          console.log(res.data);
-          this.paymentHistoryItem = res.data;
-        })
+        .then(res => this.paymentHistoryItem = res.data)
         .catch(err => console.error(err));
     },
     goToPaymentDetail(paymentItem) {
       this.paymentDialog = true;
+      this.paymentInfo.trvlPayId = paymentItem.trvlPayId;
       this.paymentInfo.payType = paymentItem.payType;
       this.paymentInfo.payAmt = paymentItem.payAmt;
       this.paymentInfo.payName = paymentItem.payName;
       this.paymentInfo.payDt = paymentItem.payDt;
       this.paymentInfo.payMethod = paymentItem.payMethod ? 1 : 0;
+      this.paymentDialogMode = 'edit';
     },
-    clickSavePayment() {
+    savePayment() {
       this.paymentInfo.userId = 1;
       this.paymentInfo.trvlId = this.tripInfo.trvlId;
-      this.$axios.post(api.tripPayment, this.paymentInfo)
+      if (this.paymentDialogMode === 'edit') {
+        this.$axios.put(api.tripPayment, this.paymentInfo)
+          .then(() => {
+            this.closePaymentDialog();
+            this.fetchPaymentList();
+          })
+          .catch(err => console.error(err));
+      } else {
+        this.$axios.post(api.tripPayment, this.paymentInfo)
+          .then(() => {
+            this.closePaymentDialog();
+            this.fetchPaymentList();
+          })
+          .catch(err => console.error(err));
+      }
+    },
+    deletePayment(id) {
+      this.$axios.delete(api.tripPayment + `/${id}`)
         .then(() => {
           this.closePaymentDialog();
           this.fetchPaymentList();
@@ -412,12 +430,14 @@ export default {
     closePaymentDialog() {
       this.paymentDialog = false;
       this.paymentInfo = {
+        trvlPayId: null,
         payType: null,
         payAmt: null,
         payName: null,
         payDt: null,
         payMethod: null,
       };
+      this.paymentDialogMode = null;
     },
   },
   mounted() {

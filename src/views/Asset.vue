@@ -4,7 +4,7 @@
       <div class="total-asset">
         <div class="info-script">
           <span id="my-account">내 계좌</span>
-          <span id="my-date">xxxx.xxxx.xxxx 기준</span>
+          <span v-if="fetchDate" id="my-date">{{fetchDate}} 기준</span>
         </div>
         <v-card
           elevation="4"
@@ -37,7 +37,9 @@
               >
                 <div class="toggle-circle" :class="{ 'active': asset.useYn === 'Y' }"></div>
               </button>
-              {{asset.balAmt.toLocaleString()}} 원
+              <span class="money">
+                {{asset.balAmt.toLocaleString()}} 원
+              </span>
             </div>
           </v-card>
         </div>
@@ -102,6 +104,7 @@ export default {
       connect: true,
       showBtn: false,
       lastScrollPosition: 0,
+      fetchDate: '',
     };
   },
   computed: {
@@ -118,20 +121,22 @@ export default {
   },
   async mounted() {
     window.addEventListener('scroll', this.onScroll);
-    if (localStorage.getItem('asset-info')) {
+    const assetInfo = localStorage.getItem('asset-info');
+    const fetchDate = localStorage.getItem('fetchDate');
+    if (assetInfo && fetchDate) {
       try {
         const accountResponse = await this.$axios.get(api.fetchAllAccountListUrl);
         const cardResponse = await this.$axios.get(api.fetchAllCardListUrl);
 
         this.accountList = accountResponse.data;
         this.cardList = cardResponse.data;
+
+        this.fetchDate = fetchDate;
       } catch (error) {
         this.$router.push({
           name: 'Error',
         });
       }
-    } else {
-      localStorage.setItem('asset-info', 1);
     }
   },
   beforeDestroy () {
@@ -152,11 +157,19 @@ export default {
     },
     async fetchData() {
       try {
+        console.log('asd');
         const accountResponse = await this.$axios.get(api.fetchAllAccountListUrl);
         const cardResponse = await this.$axios.get(api.fetchAllCardListUrl);
 
         this.accountList = accountResponse.data;
         this.cardList = cardResponse.data;
+
+        localStorage.setItem('asset-info', true);
+
+        let today = new Date();
+        const fetchDate = today.toLocaleString();
+        this.fetchDate = fetchDate;
+        localStorage.setItem('fetchDate', fetchDate);
       } catch (error) {
         this.$router.push({
           name: 'Error',
@@ -221,6 +234,12 @@ export default {
   margin-top: 3rem;
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
+}
+
+.info-script > span:nth-child(2) {
+  font-size: .5rem;
+
 }
 
 .each-asset-box {
@@ -275,7 +294,7 @@ export default {
 .toggle-circle {
   width: 15px;
   height: 15px;
-  background-color: rgb(231, 231, 231);
+  background-color: #A0A0A0;
   position: absolute;
   border-radius: 10px;
   top: 2.5px;
@@ -307,15 +326,19 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: .9rem;
+  font-size: .5rem;
 }
 
 .asset-name span {
-  font-size: .65rem;
+  font-size: .3rem;
   color: gray;
 }
 
 .toggle-background.card-toggle {
   margin-top: auto;
+}
+
+.money {
+  font-size: .6rem;
 }
 </style>

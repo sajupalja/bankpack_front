@@ -81,6 +81,7 @@ export default {
           trvlDt: '2021-10-16 (토)',
         },
       ],
+      editorContent: null,
     };
   },
   methods: {

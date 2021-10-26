@@ -9,6 +9,7 @@ export default {
   myTripList:'/travel/reviews/user/1',
   myTripDetail: '/travel/reviews/',
   tripPaymentList: '/spending/travel/list/',
+  tripPayment: '/spending/travel',
 
   // reviews
   fetchAllReviewsUrl: '/travel/reviews',

@@ -2,6 +2,14 @@
   <div class="recommendation">
     <v-container>
         <h3>{{ username }}님께 추천드리는 여행지</h3>
+    <div v-if="!this.loadComplete" class="loadingSpinner">
+          <v-progress-circular
+      :size="100"
+      color="var(--primary)"
+      indeterminate
+    ></v-progress-circular>
+    </div>
+        <div v-if="this.loadComplete">
         <div
           v-for="(item,i) in recommendationItems"
           :key="i"
@@ -40,6 +48,7 @@
       >
         다시 추천 받으러 가기
       </v-btn>
+      </div>
     </v-container>
   </div>
 </template>
@@ -53,6 +62,7 @@ export default {
       username: '지누무주2',
       recommendationItems: [
       ],
+      loadComplete : false,
     };
   },
   methods:{
@@ -73,6 +83,9 @@ export default {
           console.log(this.$route.params);
           console.log(res.data);
           this.recommendationItems = res.data;
+          if (this.recommendationItems.length != 0){
+            this.loadComplete = true;
+          }
         })
         .catch(err => console.error(err));
     },
@@ -92,6 +105,13 @@ export default {
 
 .displayToggle{
   display : none;
+}
+
+.loadingSpinner{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
 }
 
 .recommendation-list-item {

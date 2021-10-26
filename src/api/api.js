@@ -1,4 +1,7 @@
 export default {
+  // home
+  fetchMyTripAsset: '/spending/account/budget?userId=1',
+
   // my asset
   fetchAllAccountListUrl: '/spending/account/list?userId=1',
   fetchAllCardListUrl: '/spending/card/list?userId=1',
@@ -14,6 +17,10 @@ export default {
   // reviews
   fetchAllReviewsUrl: '/travel/reviews',
   searchReviewsUrl: '/travel/reviews/detail/',
+
+
+  // reviewDetail
+  fetchReviewUrl: '/travel/reviews/',
 
   // recommendation
   recommendResult : '/travel/recommend/result',

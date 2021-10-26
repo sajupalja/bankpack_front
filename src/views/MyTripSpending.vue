@@ -54,17 +54,170 @@
         </div>
       </div>
     </div>
-    <v-btn
-      class="payment-add-btn"
-      color="primary"
-      :to="{ name: 'Payment' }"
-      fixed
-      bottom
-      right
-      fab
+
+    <!-- 결제내역 추가 팝업 -->
+    <v-dialog
+      v-model="paymentDialog"
+      persistent
     >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          class="payment-add-btn"
+          color="primary"
+          v-bind="attrs"
+          v-on="on"
+          fixed
+          bottom
+          right
+          fab
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </template>
+
+      <v-card
+        class="payment-popup"
+        height="100%"
+      >
+        <div class="payment-popup-title">결제 내역</div>
+        <v-container>
+          <v-row>
+            <!-- 결제 분류 -->
+            <v-col
+              class="form-label-col"
+              cols="3"
+            >
+              <label class="form-label">분류</label>
+            </v-col>
+            <v-col
+              cols="9"
+              class="form-field-col"
+            >
+              <v-select
+                :items="payTypes"
+                label="분류 선택하세요"
+                hide-details
+                solo
+              ></v-select>
+            </v-col>
+
+            <!-- 결제 금액 -->
+            <v-col
+              class="form-label-col"
+              cols="3"
+            >
+              <label class="form-label">금액</label>
+            </v-col>
+            <v-col
+              cols="9"
+              class="form-field-col"
+            >
+              <v-text-field
+                label="금액 입력하세요"
+                hide-details
+                solo
+              ></v-text-field>
+            </v-col>
+
+            <!-- 결제 내용 -->
+            <v-col
+              class="form-label-col"
+              cols="3"
+            >
+              <label class="form-label">내용</label>
+            </v-col>
+            <v-col
+              cols="9"
+              class="form-field-col"
+            >
+              <v-text-field
+                label="내용 입력하세요"
+                hide-details
+                solo
+              ></v-text-field>
+            </v-col>
+
+            <!-- 결제 날짜 -->
+            <v-col
+              class="form-label-col"
+              cols="3"
+            >
+              <label class="form-label">날짜</label>
+            </v-col>
+            <v-col
+              cols="9"
+              class="form-field-col"
+            >
+            <v-menu
+              ref="menu"
+              v-model="dateMenu"
+              :close-on-content-click="true"
+              :return-value.sync="date"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="date"
+                  prepend-inner-icon="mdi-calendar"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                  solo
+                  label="날짜를 선택하세요"
+                  hide-details
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="date"
+                no-title
+                scrollable
+              >
+              </v-date-picker>
+            </v-menu>
+            </v-col>
+
+            <!-- 결제 수단 -->
+            <v-col
+              class="form-label-col"
+              cols="3"
+            >
+              <label class="form-label">결제수단</label>
+            </v-col>
+            <v-col
+              cols="9"
+              class="form-field-col"
+            >
+              <v-select
+                :items="payMethods"
+                label="수단 선택하세요"
+                hide-details
+                solo
+              ></v-select>
+            </v-col>
+          </v-row>
+        </v-container>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            @click="paymentDialog = false"
+          >
+            닫기
+          </v-btn>
+          <v-btn
+            color="primary"
+            text
+            @click="paymentDialog = false"
+          >
+            저장
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </div>
 </template>
 
@@ -130,6 +283,11 @@ export default {
       ],
       paymentHistoryItem: [],
       filter: null,
+      paymentDialog: false,
+      payTypes: ['숙비', '식비', '교통비', '활동비', '기타비'],
+      dateMenu: false,
+      date: null,
+      payMethods: ['카드', '현금'],
     };
   },
   computed: {
@@ -306,5 +464,36 @@ export default {
 
 .payment-add-btn {
   margin: 0.6rem;
+}
+
+.payment-popup {
+  padding: 1.6rem 1.2rem 1rem 1.2rem;
+}
+
+.payment-popup-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.form-label-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0.2rem;
+  padding-right: 0;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.form-field-col {
+  padding-right: 0;
+  padding-left: 0.4rem;
+}
+
+.v-card__actions {
+  padding: 0 !important;
 }
 </style>

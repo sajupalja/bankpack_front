@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bankpack-front
+  labels:
+    app: bankpack-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: bankpack-front-svc
+  template:
+    metadata:
+      labels:
+        app: bankpack-front-svc
+    spec:
+      containers:
+      - name: bankpack-front
+        image: drache0311/bankpack:dev
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: SERVLET_CONTEXT_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: bankpack-front-config
+              key: SERVLET_CONTEXT_PATH

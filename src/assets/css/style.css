@@ -8,6 +8,7 @@
   --font: #242038;
   --grey: #808080;
   --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  --card-border-radius: 4px;
 }
 
 .router-link {

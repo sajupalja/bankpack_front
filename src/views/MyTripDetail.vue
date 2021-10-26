@@ -3,9 +3,12 @@
     <div class="header">
       <img
         class="header-img"
-        src="https://lp-cms-production.imgix.net/2021-03/shutterstock_304631102.jpg?auto=format&fit=crop&sharp=10&vib=20&ixlib=react-8.6.4&w=850"
+        :src="tripInfo.imgUrl"
         alt="header-image"
       >
+      <div class="trip-destination-overlay">
+        <h1 class="trip-destination">{{ tripInfo.cntryName }} {{ tripInfo.cityName }}</h1>
+      </div>
     </div>
     <div class="body">
       <v-tabs
@@ -33,18 +36,34 @@
           >지출 관리</router-link>
         </v-tab>
       </v-tabs>
-      <router-view></router-view>
+      <router-view :trip-info="tripInfo"></router-view>
     </div>
   </div>
 </template>
 
 <script>
+import api from '../api/api.js';
+
 export default {
   name: 'MyTripDetail',
   data() {
     return {
       tab: 0,
+      tripInfo: [],
     };
+  },
+  methods: {
+    fetchTripInfo() {
+      this.$axios.get(api.myTripDetail + this.$route.params.trvlId)
+        .then(res => {
+          console.log(res.data);
+          this.tripInfo = res.data;
+        })
+        .catch(err => console.error(err));
+    },
+  },
+  mounted() {
+    this.fetchTripInfo();
   },
 };
 </script>
@@ -62,6 +81,20 @@ export default {
   object-fit: cover;
   height: 100%;
   width: 100%;
+}
+
+.trip-destination-overlay {
+  position: relative;
+  top: -110px;
+  padding-top: 0.2rem;
+  padding-bottom: 1.4rem;
+  background: rgb(0,0,0);
+  background: linear-gradient(0deg, rgba(0,0,0,0.8) 30%, rgba(74,74,74,0.6) 77%, rgba(147,147,147,0.2) 99%);
+}
+
+.trip-destination {
+  margin-left: 1rem;
+  color: white;
 }
 
 .body {

@@ -3,25 +3,34 @@
     <div class="search-input-box">
       <v-text-field
         solo
-        label="search"
+        hide-details
+        label="후기를 검색해보세요"
         class="search-input"
       ></v-text-field>
+      <v-icon
+        large
+        class="search-icon"
+      >
+        mdi-magnify
+      </v-icon>
     </div>
+
     <div class="review-list-box">
+      <h3 class="review-list-title">최근 작성 후기</h3>
       <div
-        v-for="item in reviewItems"
-        :key="item.id">
+        v-for="review in reviewItems"
+        :key="review.trvlId"
+      >
         <router-link
           class="router-link"
-          :to="{ name: 'ReviewInfo', params:{ reviewId: item.id} }"
+          :to="{ name: 'ReviewInfo', params:{ reviewId: review.trvlId } }"
         >
           <v-card class="review">
-            <img v-if="item.thumbnail" :src="item.thumbnail" alt="" class="thumbnail-img">
-            <div v-else class="thumbnail-img"></div>
+            <img src="/" alt="" class="thumbnail-img">
             <div class="review-info">
-              <h2>{{item.title}}</h2>
-              <p>{{item.date}}</p>
-              <p>{{item.desc}}</p>
+              <h3>{{review.trvlName}}</h3>
+              <p>{{review.trvlEndDt.slice(0,10)}}</p>
+              <p>{{review.userName}}</p>
             </div>
           </v-card>
         </router-link>
@@ -31,28 +40,49 @@
 </template>
 
 <script>
+import api from '../api/api';
+
 export default {
   name: 'ReviewList',
   data () {
     return {
-      reviewItems: [
-        {
-          id: 1, title: '프라하 여행', thumbnail: 'https://image.kkday.com/v2/image/get/w_960%2Cc_fit%2Cq_55%2Ct_webp/s1.kkday.com/product_22175/20200403063015_QVE1e/jpg', date: '2021-02-03', desc: 'no contents',
-        }, {
-          id: 2, title: '미국 여행', thumbnail: '', date: '2021-02-03', desc: 'no contents',
-        }, {
-          id: 3, title: '런던 여행', thumbnail: '', date: '2021-02-03', desc: 'no contents',
-        },
-      ],
+      reviewItems: [],
     };
+  },
+  async mounted () {
+    try {
+      const fetchReviewData = await this.$axios.get(api.fetchAllReviewsUrl);
+      this.reviewItems = fetchReviewData.data;
+    } catch (error) {
+      this.$router.push({
+        name: 'Error',
+      });
+    }
+
   },
 };
 </script>
 
 <style scoped>
+.search-input-box {
+  margin: 20px;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
 .review-list {
-  height: 100%;
+  padding-bottom: 2rem;
   background-color: var(--background);
+  height: 92vh;
+}
+
+.review-list-title {
+  margin-left: 1rem;
 }
 
 .review {
@@ -61,12 +91,6 @@ export default {
   padding: 1rem;
   align-items: center;
   cursor: pointer;
-  transition: .2s ease;
-}
-
-.review:hover {
-  background-color: var(--shadow);
-  transform: scale(1.05);
 }
 
 .review-info {
@@ -78,11 +102,8 @@ export default {
 }
 
 .review-info > p:nth-child(2) {
-  font-size: .5rem;
-}
-
-.search-input-box {
-  margin: 20px;
+    color: gray;
+    font-size: .5rem;
 }
 
 .thumbnail-img {

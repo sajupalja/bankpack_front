@@ -2,13 +2,13 @@
   <div class="my-trip-spending">
     <div class="spending-progress-container">
       <div class="current-spending-title">현재 지출</div>
-      <div class="current-spending-amount">{{ currentSpending }} <span class="total-budget-amount">/ {{ totalBudget }}</span></div>
+      <div class="current-spending-amount">{{ tripInfo.totalPayAmt.toLocaleString({style:'currency'}) }}원 <span class="total-budget-amount">/ {{ tripInfo.budgetAmt.toLocaleString({style:'currency'}) }}원</span></div>
       <v-progress-linear
         class="spending-progress-bar"
-        :value="progress"
+        :value="spendingPercentage"
         height="25"
       >
-        <span class="progress-percentage">{{ Math.ceil(progress) }}%</span>
+        <span class="progress-percentage">{{ spendingPercentage }}%</span>
       </v-progress-linear>
     </div>
     <div class="spending-pie-chart-container">
@@ -24,13 +24,17 @@
           class="payment-history-filter"
           v-for="filter in paymentHistoryFilters"
           :key="filter.name"
+          @click="changeFilter(filter)"
         >
-          <span class="filter-btn">{{ filter.name }}</span>|
+          <span
+            class="filter-btn"
+            :id="filter.id"
+          >{{ filter.name }}</span>|
         </div>
       </div>
       <div
         class="payment-history-card"
-        v-for="item in paymentHistoryItem"
+        v-for="item in filteredPaymentHistory"
         :key="item.trvlPayId"
         @click="goToPaymentDetail"
       >
@@ -41,12 +45,12 @@
           <v-icon color="white">{{ paymentIcon(item.payType) }}</v-icon>
         </div>
         <div class="payment-history-description">
-          <span class="payment-history-date">{{ item.payDt }}</span>
+          <span class="payment-history-date">{{ item.payDt | moment('YYYY-MM-DD HH:mm') }}</span>
           <span class="payment-history-name">{{ item.payName }}</span>
         </div>
         <div class="payment-history-amount">
-          <span class="payment-history-method">{{ item.payMethod }}</span>
-          <span class="payment-history-amount">{{ item.payAmt }}</span>
+          <span class="payment-history-method">{{ getPayMethod(item.payMethod) }}</span>
+          <span class="payment-history-amount">{{ item.payAmt.toLocaleString({style:'currency'}) }}</span>
         </div>
       </div>
     </div>
@@ -66,17 +70,16 @@
 
 <script>
 import PieChart from '../components/PieChart.js';
+import api from '../api/api.js';
 
 export default {
   name: 'MyTripSpending',
   components: {
     PieChart,
   },
+  props: ['tripInfo'],
   data() {
     return {
-      progress: 80,
-      currentSpending: '160만원',
-      totalBudget: '200만원',
       chartOptions: {
         cutoutPercentage: 0,
         legend: {
@@ -94,51 +97,58 @@ export default {
           {
             label: '카테고리별 지출',
             backgroundColor: ['#2878A0', '#FAF8D4', '#BBDDFF', '#EF8354', '#242038'],
-            data: [0.1, 0.2, 0.3, 0.3, 0.1],
+            data: [this.tripInfo.totalFoodRate, this.tripInfo.totalRoomRate, this.tripInfo.totalTrffRate, this.tripInfo.totalActRate, this.tripInfo.totalEtcRate],
           },
         ],
       },
       paymentHistoryFilters: [
         {
+          filterValue: null,
           name: '전체',
+          id: 'filterAll',
         }, {
-          name: '식비',
-        }, {
+          filterValue: 1,
           name: '숙비',
+          id: 'filterRoom',
         }, {
+          filterValue: 2,
+          name: '식비',
+          id: 'filterFood',
+        }, {
+          filterValue: 3,
           name: '교통비',
+          id: 'filterTransportation',
         }, {
+          filterValue: 4,
           name: '활동비',
+          id: 'filterActivity',
         }, {
+          filterValue: 5,
           name: '기타비',
+          id: 'filterEtc',
         },
       ],
-      paymentHistoryItem: [
-        {
-          trvlPayId: 1,
-          payAmt: 10000,
-          payDt: '2021-10-21 15:00',
-          payName: '편의점',
-          payMethod: '체크카드',
-          payType: 2,
-        }, {
-          trvlPayId: 2,
-          payAmt: 150000,
-          payDt: '2021-10-21 10:00',
-          payName: 'oo호텔',
-          payMethod: '체크카드',
-          payType: 1,
-        }, {
-          trvlPayId: 3,
-          payAmt: 3520,
-          payDt: '2021-10-20 20:00',
-          payName: '버스',
-          payMethod: '현금',
-          payType: 3,
-        },
-      ],
-
+      paymentHistoryItem: [],
+      filter: null,
     };
+  },
+  computed: {
+    spendingPercentage() {
+      return (this.tripInfo.totalPayAmt / this.tripInfo.budgetAmt * 100).toFixed(2);
+    },
+    filteredPaymentHistory() {
+      let result = [];
+      if (this.filter === null) {
+        return this.paymentHistoryItem;
+      } else {
+        this.paymentHistoryItem.forEach(item => {
+          if (item.payType === this.filter) {
+            result.push(item);
+          }
+        });
+        return result;
+      }
+    },
   },
   methods: {
     paymentIcon(payType) {
@@ -154,10 +164,37 @@ export default {
         return 'mdi-minus';
       }
     },
+    getPayMethod(method) {
+      if (method === 0) {
+        return '현금';
+      } else {
+        return '카드';
+      }
+    },
+    changeFilter(filter) {
+      this.filter = filter.filterValue;
+      const currentFilter = document.getElementsByClassName('active-filter')[0];
+      currentFilter.classList.remove('active-filter');
+      const newFilter = document.getElementById(filter.id);
+      newFilter.classList.add('active-filter');
+    },
+    fetchPaymentList() {
+      this.$axios.get(api.tripPaymentList + this.tripInfo.trvlId)
+        .then(res => {
+          console.log(res.data);
+          this.paymentHistoryItem = res.data;
+        })
+        .catch(err => console.error(err));
+    },
     goToPaymentDetail() {
       // eslint-disable-next-line object-curly-newline
       this.$router.push({ name: 'Payment' });
     },
+  },
+  mounted() {
+    this.fetchPaymentList();
+    const filterAll = document.getElementById('filterAll');
+    filterAll.classList.add('active-filter');
   },
 };
 </script>
@@ -214,12 +251,18 @@ export default {
   color: var(--grey);
 }
 
+.active-filter {
+  color: var(--primary);
+  font-weight: 600;
+}
+
 .payment-history-card {
   background-color: white;
   padding: 1rem;
   margin: 0.6rem 0;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   display: flex;
+  border-radius: var(--card-border-radius);
 }
 
 .payment-history-card:hover {
@@ -236,6 +279,10 @@ export default {
   padding: 0.4rem;
   margin: auto 0;
   font-size: 0.6rem;
+}
+
+.payment-history-name {
+  font-size: 0.9rem;
 }
 
 .payment-history-description, .payment-history-amount {

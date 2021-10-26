@@ -3,7 +3,7 @@
     <div v-if="connect">
       <div class="total-asset">
         <div class="info-script">
-          <span id="my-account">내 계좌</span>
+          <span>내 계좌</span>
           <span v-if="fetchDate" id="my-date">{{fetchDate}} 기준</span>
         </div>
         <v-card

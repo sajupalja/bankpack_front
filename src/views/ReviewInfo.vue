@@ -1,66 +1,74 @@
 <template>
-  <div class="review-detail">
-    <div class="title">
-      <h2>체코 프라하 3박4일 여행기</h2>
-    </div>
-
-    <div class="review-write-info">
-      <p>작성자: 하얀족제비</p>
-      <p>작성일: 2021/10/15</p>
-    </div>
-
-    <div class="review-info-card">
-      <div class="trip-start-date">여행 시작일: {{ trvlInfo.trvlStartDt }}</div>
-      <div class="trip-end-date">여행 종료일: {{ trvlInfo.trvlEndDt }}</div>
-      <div class="trip-ppl-cnt">여행 인원: {{ trvlInfo.cmpnCnt }}</div>
-      <div class="trip-type">여행 유형: {{ getTripType(trvlInfo.cmpnType) }}</div>
-    </div>
-
-    <div class="review-chart">
-      <h3 class="chart-title">하얀족제비님의 지출 내역</h3>
-      <div class="review-expense-info">
-        <div class="review-expense">
-          <h5>총 지출 비용</h5>
-          <h2>1000000 원</h2>
-        </div>
-      </div>
-      <pie-chart
-        :chart-data="chartData"
-        :options="chartOptions"
-        class="pie-chart"
-      />
-    </div>
-
-    <v-divider></v-divider>
-
-    <div class="timeline-container">
-      <v-timeline
-        dense
+  <div>
+    <div class="header">
+      <img
+        class="header-img"
+        :src="trvlInfo.imgUrl"
+        alt="header-image"
       >
-        <v-timeline-item
-          v-for="review in trvlRevwItems"
-          :key="review.trvlRevwId"
-          small
-        >
-          <span class="timeline-date">{{ review.trvlDt }}</span>
-          <div class="timeline-card">
-            <div class="timeline-content">
-              {{ review.revwText }}
-            </div>
-            <v-divider class="timeline-card-divider"></v-divider>
-            <div class="timeline-footer">
-              작성일: {{ review.writeDate }}
-            </div>
-          </div>
-        </v-timeline-item>
-      </v-timeline>
+      <div class="trvl-title">
+        <h1 class="title">{{ trvlInfo.trvlName }}</h1>
+      </div>
     </div>
+    <div class="body">
+      <div class="review-write-info">
+        <p>작성자: {{ trvlInfo.userName }}</p>
+      </div>
 
+      <div class="review-info-card">
+        <div class="trip-start-date" v-if="trvlInfo.trvlStartDt">여행 시작일: {{ trvlInfo.trvlStartDt | moment('YYYY-MM-DD HH:MM') }}</div>
+        <div class="trip-end-date" v-if="trvlInfo.trvlStartDt">여행 종료일: {{ trvlInfo.trvlEndDt | moment('YYYY-MM-DD HH:MM') }}</div>
+        <div class="trip-ppl-cnt">여행 인원: {{ trvlInfo.cmpnCnt }}</div>
+        <div class="trip-type">여행 유형: {{ getTripType(trvlInfo.cmpnType) }}</div>
+      </div>
+
+      <div class="review-chart">
+        <h3 class="chart-title">{{ trvlInfo.userName }}님의 지출 내역</h3>
+        <div class="review-expense-info">
+          <div class="review-expense">
+            <h5>총 지출 비용</h5>
+            <h2 v-if="trvlInfo.totalPayAmt">{{ trvlInfo.totalPayAmt.toLocaleString() }} 원</h2>
+          </div>
+        </div>
+        <pie-chart
+          :chart-data="chartData"
+          :options="chartOptions"
+          class="pie-chart"
+        />
+      </div>
+
+      <v-divider></v-divider>
+
+      <div class="timeline-container">
+        <v-timeline
+          dense
+        >
+          <v-timeline-item
+            v-for="review in trvlRevwItems"
+            :key="review.trvlRevwId"
+            small
+          >
+            <span class="timeline-date">{{ review.trvlDt }}</span>
+            <div class="timeline-card">
+              <div class="timeline-content">
+                {{ review.revwText }}
+              </div>
+              <v-divider class="timeline-card-divider"></v-divider>
+              <div class="timeline-footer">
+                작성일: {{ review.writeDate }}
+              </div>
+            </div>
+          </v-timeline-item>
+        </v-timeline>
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script>
 import PieChart from '../components/PieChart.js';
+import api from '../api/api';
 
 export default {
   name: 'ReviewInfo',
@@ -69,13 +77,8 @@ export default {
   },
   data () {
     return {
-      trvlInfo: {
-        trvlName: '하얀 족제비의 호화 호텔 끝판왕 프랑스 파리 여행기',
-        trvlStartDt: '2021-10-14',
-        trvlEndDt: '2021-10-21',
-        cmpnCnt: 2,
-        cmpnType: 2,
-      },
+      trvlInfo: {},
+      rateInfo: {},
       chartOptions: {
         responsive: true,
         cutoutPercentage: 1,
@@ -88,17 +91,7 @@ export default {
           },
         },
       },
-      chartData: {
-        hoverBorderWidth: 10,
-        labels: ['식비', '숙비', '교통비', '활동', '기타'],
-        datasets: [
-          {
-            label: '카테고리별 지출',
-            backgroundColor: ['#2878A0', '#FAF8D4', '#BBDDFF', '#EF8354', '#242038'],
-            data: [0.1, 0.2, 0.3, 0.3, 0.1],
-          },
-        ],
-      },
+      chartData: null,
       trvlRevwItems: [
         {
           trvlRevwId: 1,
@@ -114,30 +107,114 @@ export default {
       ],
     };
   },
+  mounted () {
+    this.fetchData();
+  },
   methods: {
+    async fetchData() {
+      const reviewId = this.$route.params.reviewId;
+      const res = await this.$axios.get(api.fetchReviewUrl + reviewId);
+      const reviewDetailData = res.data;
+      console.log(reviewDetailData);
+      const {
+        trvlName,
+        trvlStartDt,
+        trvlEndDt,
+        cmpnCnt,
+        cmpnType,
+        userName,
+        totalPayAmt,
+        totalActRate,
+        totalEtcRate,
+        totalFoodRate,
+        totalRoomRate,
+        totalTrffRate,
+        imgUrl,
+      } = reviewDetailData;
+
+      const trvlInfo = {
+        trvlName,
+        trvlStartDt,
+        trvlEndDt,
+        cmpnCnt,
+        cmpnType,
+        userName,
+        totalPayAmt,
+        imgUrl,
+      };
+
+      const rateList = [totalFoodRate, totalRoomRate, totalTrffRate, totalActRate, totalEtcRate];
+
+      this.trvlInfo = trvlInfo;
+      this.updateChartData(rateList);
+    },
     getTripType(type) {
-      if (type === 1) {
+      switch (type) {
+      case '1':
         return '가족 여행';
-      } else if (type === 2) {
+      case '2':
         return '친구 여행';
-      } else if (type === 3) {
+      case '3':
         return '커플 여행';
-      } else {
-        return '홀로 여행';
+      case '4':
+        return '홀로여행';
+      default:
+        return '-';
       }
+    },
+    updateChartData(info) {
+      this.chartData = {
+        hoverBorderWidth: 10,
+        labels: ['식비', '숙비', '교통비', '활동', '기타'],
+        datasets: [
+          {
+            label: '카테고리별 지출',
+            backgroundColor: ['#2878A0', '#FAF8D4', '#BBDDFF', '#EF8354', '#242038'],
+            data: info,
+          },
+        ],
+      };
     },
   },
 };
 </script>
 
 <style scoped>
-.review-detail {
-  background-color: var(--background);
-  padding: 1.6rem 1rem 1rem 1rem;
+.header {
+  height: 30vh;
+}
+
+.header-img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.trvl-title {
+  position: relative;
+  top: -110px;
+  padding-top: 0.2rem;
+  padding-bottom: 1.4rem;
+  background: rgb(0,0,0);
+  background: linear-gradient(0deg, rgba(0,0,0,0.8) 30%, rgba(74,74,74,0.6) 77%, rgba(147,147,147,0.2) 99%);
 }
 
 .title {
-  text-align: center;
+  margin-left: 1rem;
+  color: white;
+}
+
+.body {
+  background-color: var(--background);
+  position: relative;
+  top: -50px;
+  border-top-right-radius: 25px;
+  border-top-left-radius: 25px;
+  padding: 1.6rem 1rem 1rem 1rem;
+}
+
+.title > h5 {
+  font-size: 1.25rem;
 }
 
 .review-write-info {

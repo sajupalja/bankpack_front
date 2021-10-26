@@ -3,7 +3,7 @@
     <div class="header">
       <img
         class="header-img"
-        src="recommendationItem.imgUrl"
+        :src="recommendationItem.imgUrl"
         alt="header-image"
       >
     </div>

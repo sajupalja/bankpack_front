@@ -13,12 +13,12 @@
             <v-card class="recommendation-list-item">
               <img
                 class="recommendation-item-img"
-                :src="item.thumbnail"
+                :src="item.imgUrl"
                 alt="thumbnail"
               >
               <div class="recommendation-item-content">
                 <div class="recommendation-item-title">
-                  {{item.cntry_name}} {{item.city_name}}
+                  {{item.cntryName}} {{item.cityName}}
                 </div>
               </div>
               <v-btn
@@ -45,20 +45,13 @@
 </template>
 
 <script>
-
+import api from '../api/api.js';
 export default {
   name: 'Recommendation',
   data() {
     return {
       username: '지누무주',
       recommendationItems: [
-        {
-          cntryId: 275, cityId:256, clstrLabel:'6', cntry_name:'대한민국', city_name:'강릉', thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-        }, {
-          cntryId: 275, cityId:256, clstrLabel:'6', cntry_name:'일본', city_name:'도쿄', thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-        }, {
-          cntryId: 275, cityId:256, clstrLabel:'6', cntry_name:'영국', city_name:'런던', thumbnail: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg',
-        },
       ],
     };
   },
@@ -66,8 +59,27 @@ export default {
     moveQuestion(btnType){
       this.e6 += btnType;
     },
+    fetchRecommendation() {
+
+      this.$axios.post(api.recommendResult, {
+        budgetAmt: this.$route.params.budgetAmt,
+        cmpnCnt:this.$route.params.cmpnCnt,
+        cmpnType:this.$route.params.cmpnType,
+        trvlMainFctr:this.$route.params.trvlMainFctr,
+        trvlPd:this.$route.params.trvlPd,
+        userId:this.$route.params.userId,
+      })
+        .then(res => {
+          console.log(this.$route.params);
+          console.log(res.data);
+          this.recommendationItems = res.data;
+        })
+        .catch(err => console.error(err));
+    },
   },
-  watch : {},
+  mounted() {
+    this.fetchRecommendation();
+  },
 
 };
 </script>

@@ -10,9 +10,10 @@
       >
           <h3>{{surveySteps[e6-1]}}</h3>
         <v-text-field
-                  :value="budget_amt"
+                  :value="budgetAmt"
                   single-line
-                  ref = "budget_amt_form"
+                  :rules="[numberRule]"
+                  ref = "budgetAmt_form"
                   @input="numFilter"
                   suffix="만원"
                 />
@@ -22,11 +23,11 @@
           >
           <h3>{{surveySteps[e6-1]}}</h3>
             <v-text-field
-              :value="trvl_pd"
+              :value="trvlPd"
               single-line
               :rules="[numberRule]"
               @input="numFilter"
-              ref = "trvl_pd_form"
+              ref = "trvlPd_form"
               suffix="일"
             />
         </v-stepper-content>
@@ -34,7 +35,7 @@
         <v-stepper-content step="3"
          class="surveyStepper">
          <h3>{{surveySteps[e6-1]}}</h3>
-            <v-radio-group v-model="cmpn_type"  class="surveyRadio">
+            <v-radio-group v-model="cmpnType"  class="surveyRadio">
               <v-radio
                 v-for="n in 4"
                 :key="n"
@@ -48,11 +49,11 @@
         class="surveyStepper">
         <h3>{{surveySteps[e6-1]}}</h3>
             <v-text-field
-              :value="cmpn_cnt"
+              :value="cmpnCnt"
               single-line
               :rules="[numberRule]"
               @input="numFilter"
-              ref = "cmpn_cnt_form"
+              ref = "cmpnCnt_form"
               suffix="명"
             />
         </v-stepper-content>
@@ -60,7 +61,7 @@
         <v-stepper-content step="5"
          class="surveyStepper">
             <h3>{{surveySteps[e6-1]}}</h3>
-            <v-radio-group v-model="trvl_main_fctr" class="surveyRadio">
+            <v-radio-group v-model="trvlMainFctr" class="surveyRadio">
               <v-radio
                 v-for="n in 4"
                 :key="n"
@@ -93,7 +94,7 @@
           </v-btn>
               <v-btn v-if="e6 == 5"
             id = "survey-submit-btn"
-            :to = "{name: 'Recommendation'}" link
+            :to="{ name: 'Recommendation', params:{ budgetAmt: this.budgetAmt, cmpnCnt:this.cmpnCnt, cmpnType:this.cmpnType,trvlMainFctr:this.trvlMainFctr, trvlPd:this.trvlPd, userId:this.userId} }"
             :disabled="!isFormValid"
           >
             제출
@@ -122,15 +123,17 @@ export default {
       ],
       continueBtnLabel : '다음',
       cancelBtnLabel : '이전',
-      budget_amt : '100000',
-      trvl_pd : '3',
-      cmpn_type : 1,
-      cmpn_cnt : '2',
-      trvl_main_fctr : 1,
+      userId : 1,
+      budgetAmt : 1000000,
+      trvlPd : 3,
+      cmpnType : 1,
+      cmpnCnt : 2,
+      trvlMainFctr : 1,
       numberRule: v => {
-        if (!v.trim()) return true;
-        if (!isNaN(parseInt(v)) && v > 0 && v <= 999) return true;
-        return '0 이상 999 이하로 작성해주세요';
+        if (isNaN(parseInt(v))) return '값을 입력해주세요';
+        if (v <= 0) return '0 이상의 값을 입력해주세요';
+        if ((this.e6 == 2 || this.e6 == 4) && ( v > 999)) return '999 이하로 작성해주세요';
+        return true;
       },
       radioRule: v => {
         if (v) return true;
@@ -145,18 +148,18 @@ export default {
 
     numFilter(val){
       val = val.replace(/[^0-9]/g, '');
-      var field = this.$refs.budget_amt_form;
+      var field = this.$refs.budgetAmt_form;
       switch (this.e6){
       case 1:
-        this.budget_amt = val;
+        this.budgetAmt = val;
         break;
       case 2:
-        field = this.$refs.trvl_pd_form;
-        this.trvl_pd = val;
+        field = this.$refs.trvlPd_form;
+        this.trvlPd = val;
         break;
       case 4:
-        field = this.$refs.cmpn_cnt_form;
-        this.cmpn_cnt = val;
+        field = this.$refs.cmpnCnt_form;
+        this.cmpnCnt = val;
         break;
 
       }

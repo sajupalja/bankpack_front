@@ -108,11 +108,19 @@ const routes = [
     },
   },
   {
-    path: '/recommendation/:recommendationId',
+    path: '/recommendation/detail',
     name: 'RecommendationDetail',
     component: () => import('../views/RecommendationDetail.vue'),
     meta: {
       title: 'BANKPACK | 추천 여행지',
+    },
+  },
+  {
+    path: '/mytripupdate',
+    name: 'MyTripUpdate',
+    component: () => import('../views/MyTripUpdate.vue'),
+    meta: {
+      title: 'BANKPACK | 여행내용 수정',
     },
   },
 ];

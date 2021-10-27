@@ -101,9 +101,9 @@ export default {
   methods: {
     fetchRecommendationDetail() {
       this.$axios.post(api.recommendationDetail, {
-        cntryId : this.$route.params.cntryId,
-        cityId : this.$route.params.cityId,
-        clstrLabel : this.$route.params.clstrLabel,
+        cntryId : this.$route.query.cntryId,
+        cityId : this.$route.query.cityId,
+        clstrLabel : this.$route.query.clstrLabel,
       })
         .then(res => {
           console.log(res.data);

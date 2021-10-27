@@ -10,12 +10,12 @@
       >
           <h3>{{surveySteps[e6-1]}}</h3>
         <v-text-field
-                  :value="budgetAmt"
+                  :value="surveyResult.budgetAmt"
                   single-line
                   :rules="[numberRule]"
                   ref = "budgetAmt_form"
                   @input="numFilter"
-                  suffix="만원"
+                  suffix="원"
                 />
         </v-stepper-content>
           <v-stepper-content step="2"
@@ -23,7 +23,7 @@
           >
           <h3>{{surveySteps[e6-1]}}</h3>
             <v-text-field
-              :value="trvlPd"
+              :value="surveyResult.trvlPd"
               single-line
               :rules="[numberRule]"
               @input="numFilter"
@@ -35,7 +35,7 @@
         <v-stepper-content step="3"
          class="surveyStepper">
          <h3>{{surveySteps[e6-1]}}</h3>
-            <v-radio-group v-model="cmpnType"  class="surveyRadio">
+            <v-radio-group v-model="surveyResult.cmpnType"  class="surveyRadio">
               <v-radio
                 v-for="n in 4"
                 :key="n"
@@ -49,7 +49,7 @@
         class="surveyStepper">
         <h3>{{surveySteps[e6-1]}}</h3>
             <v-text-field
-              :value="cmpnCnt"
+              :value="surveyResult.cmpnCnt"
               single-line
               :rules="[numberRule]"
               @input="numFilter"
@@ -61,7 +61,7 @@
         <v-stepper-content step="5"
          class="surveyStepper">
             <h3>{{surveySteps[e6-1]}}</h3>
-            <v-radio-group v-model="trvlMainFctr" class="surveyRadio">
+            <v-radio-group v-model="surveyResult.trvlMainFctr" class="surveyRadio">
               <v-radio
                 v-for="n in 4"
                 :key="n"
@@ -94,7 +94,7 @@
           </v-btn>
               <v-btn v-if="e6 == 5"
             id = "survey-submit-btn"
-            :to="{ name: 'Recommendation', params:{ budgetAmt: this.budgetAmt, cmpnCnt:this.cmpnCnt, cmpnType:this.cmpnType,trvlMainFctr:this.trvlMainFctr, trvlPd:this.trvlPd, userId:this.userId} }"
+            :to="{ name: 'Recommendation', params:{ surveyResult: this.surveyResult,} }"
             :disabled="!isFormValid"
           >
             제출
@@ -124,11 +124,14 @@ export default {
       continueBtnLabel : '다음',
       cancelBtnLabel : '이전',
       userId : 1,
-      budgetAmt : 1000000,
-      trvlPd : 3,
-      cmpnType : 1,
-      cmpnCnt : 2,
-      trvlMainFctr : 1,
+      surveyResult : {
+        budgetAmt : 1000000,
+        trvlPd : 3,
+        cmpnType : 1,
+        cmpnCnt : 2,
+        trvlMainFctr : 1,
+      }
+      ,
       numberRule: v => {
         if (isNaN(parseInt(v))) return '값을 입력해주세요';
         if (v <= 0) return '0 이상의 값을 입력해주세요';
@@ -151,15 +154,15 @@ export default {
       var field = this.$refs.budgetAmt_form;
       switch (this.e6){
       case 1:
-        this.budgetAmt = val;
+        this.surveyResult.budgetAmt = val;
         break;
       case 2:
         field = this.$refs.trvlPd_form;
-        this.trvlPd = val;
+        this.surveyResult.trvlPd = val;
         break;
       case 4:
         field = this.$refs.cmpnCnt_form;
-        this.cmpnCnt = val;
+        this.surveyResult.cmpnCnt = val;
         break;
 
       }

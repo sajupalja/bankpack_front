@@ -13,6 +13,7 @@ export default {
   myTripDetail: '/travel/reviews/',
   tripPaymentList: '/spending/travel/list/',
   tripPayment: '/spending/travel',
+  myTripUpdate:'/travel/reviews/',
 
   // my reviews
   myReviewList: 'travel/reviews/',

@@ -16,7 +16,7 @@
         >
           <router-link
             class="router-link"
-            :to="{ name: 'RecommendationDetail', params:{ cityId: item.cityId, cntryId:item.cntryId, clstrLabel:item.clstrLabel,} }"
+            :to="{ name: 'RecommendationDetail', query:{ cityId: item.cityId, cntryId:item.cntryId, clstrLabel:item.clstrLabel,} }"
           >
             <v-card class="recommendation-list-item">
               <img
@@ -31,7 +31,7 @@
               </div>
               <v-btn
                 class="recommendation-item-btn"
-                :to = "{name: 'MyTripList'}"
+                :to="{name: 'MyTripUpdate', params: { surveyResult: surveyResult ,cityId: item.cityId, cntryId:item.cntryId, clstrLabel:item.clstrLabel, }}"
                 link
               >
                 추가
@@ -59,10 +59,11 @@ export default {
   name: 'Recommendation',
   data() {
     return {
-      username: '지누무주2',
+      username: '지누무주',
       recommendationItems: [
       ],
       loadComplete : false,
+      surveyResult : {},
     };
   },
   methods:{
@@ -71,13 +72,27 @@ export default {
     },
     fetchRecommendation() {
 
+      if (this.$route.params.surveyResult != undefined){
+        this.surveyResult = this.$route.params.surveyResult;
+        sessionStorage.setItem('surveyResult', JSON.stringify(this.surveyResult));
+        console.log(this.$route.params.surveyResult);
+      }
+      else if(this.$route.params.surveyResult == undefined && sessionStorage.getItem('surveyResult') != undefined){
+        this.surveyResult = JSON.parse(sessionStorage.getItem('surveyResult'));
+      }
+      else{
+        this.$router.push({
+          name: 'Error',
+        });
+      }
+
       this.$axios.post(api.recommendResult, {
-        budgetAmt: this.$route.params.budgetAmt,
-        cmpnCnt:this.$route.params.cmpnCnt,
-        cmpnType:this.$route.params.cmpnType,
-        trvlMainFctr:this.$route.params.trvlMainFctr,
-        trvlPd:this.$route.params.trvlPd,
-        userId:this.$route.params.userId,
+        budgetAmt: this.surveyResult.budgetAmt,
+        cmpnCnt:this.surveyResult.cmpnCnt,
+        cmpnType:this.surveyResult.cmpnType,
+        trvlMainFctr:this.surveyResult.trvlMainFctr,
+        trvlPd:this.surveyResult.trvlPd,
+        userId:this.surveyResult.userId,
       })
         .then(res => {
           console.log(this.$route.params);
@@ -85,13 +100,25 @@ export default {
           this.recommendationItems = res.data;
           if (this.recommendationItems.length != 0){
             this.loadComplete = true;
+            sessionStorage.setItem('recommendationItemsSaved', JSON.stringify(this.recommendationItems));
           }
         })
-        .catch(err => console.error(err));
+        .catch(err => this.$router.push({
+          name: 'Error',
+        }));
     },
   },
   mounted() {
-    this.fetchRecommendation();
+    if (this.$route.params.surveyResult != undefined){
+      this.fetchRecommendation();
+    }else if(sessionStorage.getItem('recommendationItemsSaved') != undefined){
+      this.recommendationItems = JSON.parse(sessionStorage.getItem('recommendationItemsSaved'));
+      this.loadComplete = true;
+    }
+    else if(this.$route.params.surveyResult == undefined && sessionStorage.getItem('surveyResult') != undefined){
+      this.fetchRecommendation();
+    }
+
   },
 
 };

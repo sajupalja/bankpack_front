@@ -40,11 +40,17 @@
             :to="{ name: 'ReviewInfo', params:{ reviewId: review.trvlId } }"
           >
             <v-card class="review">
-              <img :src="review.imgUrl" alt="" class="thumbnail-img">
+              <img
+                :src="review.imgUrl"
+                alt="thumbnail-img"
+                class="thumbnail-img"
+              >
               <div class="review-info">
-                <h4>{{`${review.trvlName.slice(0,10)}...`}}</h4>
-                <p>{{review.trvlEndDt.slice(0,10)}}</p>
-                <p>{{review.userName}}</p>
+                <h4 class="review-title">{{ review.trvlName.length > 17 ? review.trvlName.slice(0, 17) + '...' : review.trvlName }}</h4>
+                <div class="review-footer">
+                  <p>{{review.userName}}</p>
+                  <p><v-icon class="calendar-icon" x-small>mdi-calendar</v-icon> {{ review.trvlStartDt.slice(0,10) }} ~ {{review.trvlEndDt.slice(0,10)}}</p>
+                </div>
               </div>
             </v-card>
           </router-link>
@@ -142,33 +148,45 @@ export default {
 
 .review {
   display: flex;
-  margin: 20px;
+  margin: 1rem;
   padding: 1rem;
   align-items: center;
   cursor: pointer;
 }
 
 .review-info {
-  margin-left: 1.5rem;
+  margin-left: 1rem;
+  width: 100%;
 }
 
-.review-info > p {
+.review-footer {
+  margin-top: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.review-footer > p {
   margin: 0;
 }
 
-.review-info > p:nth-child(2) {
+.review-footer > p:nth-child(2) {
   color: gray;
-  font-size: 0.6rem;
+  font-size: 0.8rem;
 }
 
-.review-info > p:nth-child(3) {
+.review-footer > p:nth-child(1) {
   font-size: 0.8rem;
   color: black;
 }
 
+.calendar-icon {
+  margin-right: 0.2rem;
+}
+
 .thumbnail-img {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   object-fit: cover;
+  border-radius: 0 !important;
 }
 </style>

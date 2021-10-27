@@ -1,15 +1,8 @@
 <template>
   <div class="recommendation">
     <v-container>
-        <h3>{{ username }}님께 추천드리는 여행지</h3>
-    <div v-if="!this.loadComplete" class="loadingSpinner">
-          <v-progress-circular
-      :size="100"
-      color="var(--primary)"
-      indeterminate
-    ></v-progress-circular>
-    </div>
-        <div v-if="this.loadComplete">
+      <h3>{{ userName }}님께 추천드리는 여행지</h3>
+      <div v-if="this.loadComplete">
         <div
           v-for="(item,i) in recommendationItems"
           :key="i"
@@ -31,40 +24,55 @@
               </div>
               <v-btn
                 class="recommendation-item-btn"
+                color="primary"
+                outlined
                 :to="{name: 'MyTripUpdate', params: { surveyResult: surveyResult ,cityId: item.cityId, cntryId:item.cntryId, clstrLabel:item.clstrLabel, }}"
-                link
               >
                 추가
               </v-btn>
             </v-card>
           </router-link>
-         </div>
-      <v-btn
-        class="recommendation-btn"
-        block
-        x-large
-        :to = "{name: 'Survey'}"
-        link
-      >
-        다시 추천 받으러 가기
-      </v-btn>
+        </div>
+        <v-btn
+          class="recommendation-btn"
+          block
+          x-large
+          :to = "{name: 'Survey'}"
+        >
+          다시 추천 받으러 가기
+        </v-btn>
       </div>
     </v-container>
+    <v-overlay
+      class="loading-overlay"
+      :value="!loadComplete"
+    >
+      <v-progress-circular
+        indeterminate
+        color="primary"
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
 <script>
 import api from '../api/api.js';
+// eslint-disable-next-line object-curly-newline
+import { mapState } from 'vuex';
+
 export default {
   name: 'Recommendation',
   data() {
     return {
-      username: '지누무주',
       recommendationItems: [
       ],
       loadComplete : false,
       surveyResult : {},
     };
+  },
+  computed: {
+    ...mapState(['userName']),
   },
   methods:{
     moveQuestion(btnType){
@@ -128,17 +136,11 @@ export default {
 .recommendation {
   background-color: var(--background);
   height: 100vh;
+  padding: 1rem;
 }
 
 .displayToggle{
   display : none;
-}
-
-.loadingSpinner{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50vh;
 }
 
 .recommendation-list-item {
@@ -153,6 +155,7 @@ export default {
   height: 80px;
   margin-right: 1rem;
   object-fit: cover;
+  border-radius: 0 !important;
 }
 
 .recommendation-item-content {
@@ -167,9 +170,7 @@ export default {
 }
 
  .recommendation-item-btn {
-  background-color: white;
   font-weight: 600;
-  border: solid var(--primary) 2px;
   margin-left: auto;
  }
 
@@ -181,5 +182,4 @@ export default {
   font-size: 1.2rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
-
 </style>

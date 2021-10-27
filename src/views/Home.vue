@@ -3,13 +3,16 @@
     <div class="home-header">
       <img
         class="ad-img"
-        src="../assets/img/ad_img.png"
+        src="../assets/img/main_ad.gif"
         alt="ad_image"
       >
     </div>
 
     <v-container class="home-body">
-      <div class="budget-card">
+      <div
+        class="budget-card"
+        v-if="userName"
+      >
         <div class="budget-card-header">
           여행 예산
         </div>
@@ -24,14 +27,17 @@
 
       <v-btn
         class="recommend-btn"
-        :to="{ name: 'Survey' }"
+        @click="goToSurvey"
         block
         x-large
       >
         여행지 추천 받으러 가기
       </v-btn>
 
-      <div class="my-trip-card">
+      <div
+        class="my-trip-card"
+        v-if="userName"
+      >
         <div class="my-trip-card-header">
           <span>나의 여행지 목록</span>
           <span
@@ -63,12 +69,45 @@
           </div>
         </div>
       </div>
+
+      <div
+        class="review-list"
+        v-else
+      >
+        <h3 class="review-list-title">최근 후기</h3>
+        <div
+          v-for="review in reviewItems"
+          :key="review.trvlId"
+        >
+          <router-link
+            class="router-link"
+            :to="{ name: 'ReviewInfo', params:{ reviewId: review.trvlId } }"
+          >
+            <v-card class="review">
+              <img
+                :src="review.imgUrl"
+                alt="thumbnail-img"
+                class="thumbnail-img"
+              >
+              <div class="review-info">
+                <h4 class="review-title">{{ review.trvlName.length > 17 ? review.trvlName.slice(0, 17) + '...' : review.trvlName }}</h4>
+                <div class="review-footer">
+                  <p>{{review.userName}}</p>
+                  <p><v-icon class="calendar-icon" x-small>mdi-calendar</v-icon> {{ review.trvlStartDt.slice(0,10) }} ~ {{review.trvlEndDt.slice(0,10)}}</p>
+                </div>
+              </div>
+            </v-card>
+          </router-link>
+        </div>
+      </div>
     </v-container>
   </div>
 </template>
 
 <script>
 import api from '../api/api.js';
+// eslint-disable-next-line object-curly-newline
+import { mapState } from 'vuex';
 
 export default {
   name: 'Home',
@@ -76,7 +115,11 @@ export default {
     return {
       travelBudget: '1,000,000,000',
       tripItems: [],
+      reviewItems: [],
     };
+  },
+  computed: {
+    ...mapState(['userName']),
   },
   methods: {
     goToTrip(trvlId) {
@@ -90,6 +133,15 @@ export default {
     goToMyTrip() {
       // eslint-disable-next-line object-curly-newline
       this.$router.push({ name: 'MyTripList' });
+    },
+    goToSurvey() {
+      if (this.userName) {
+        // eslint-disable-next-line object-curly-newline
+        this.$router.push({ name: 'Survey' });
+      } else {
+        // eslint-disable-next-line object-curly-newline
+        this.$router.push({ name: 'Login' });
+      }
     },
     fetchRecentTrips() {
       this.$axios.get(api.myTripList)
@@ -109,10 +161,24 @@ export default {
         name: 'Error',
       });
     },
+    async fetchReviewData () {
+      try {
+        const fetchReviewData = await this.$axios.get(api.fetchAllReviewsUrl);
+        this.reviewItems = fetchReviewData.data;
+      } catch (error) {
+        this.$router.push({
+          name: 'Error',
+        });
+      }
+    },
   },
   mounted() {
-    this.fetchRecentTrips();
-    this.fetchMyTripAsset();
+    if (this.userName) {
+      this.fetchRecentTrips();
+      this.fetchMyTripAsset();
+    } else {
+      this.fetchReviewData();
+    }
   },
 };
 </script>
@@ -208,8 +274,8 @@ export default {
 }
 
 .my-trip-item-img {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   margin-right: 1rem;
   object-fit: cover;
 }
@@ -233,5 +299,58 @@ export default {
 .my-trip-item-arrow {
   display: flex;
   justify-content: center;
+}
+
+.review-list {
+  padding-top: 0.6rem;
+  padding-bottom: 2rem;
+}
+
+.review-list-title {
+  margin-left: 1rem;
+}
+
+.review {
+  display: flex;
+  margin: 1rem;
+  padding: 1rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+.review-info {
+  margin-left: 1rem;
+  width: 100%;
+}
+
+.review-footer {
+  margin-top: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.review-footer > p {
+  margin: 0;
+}
+
+.review-footer > p:nth-child(2) {
+  color: gray;
+  font-size: 0.8rem;
+}
+
+.review-footer > p:nth-child(1) {
+  font-size: 0.8rem;
+  color: black;
+}
+
+.calendar-icon {
+  margin-right: 0.2rem;
+}
+
+.thumbnail-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 0 !important;
 }
 </style>

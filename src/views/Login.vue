@@ -34,16 +34,13 @@
 </template>
 
 <script>
-import api from '../api/api.js';
+// eslint-disable-next-line object-curly-newline
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Login',
   methods: {
-    testLogin() {
-      this.$axios.get('/user/users/1')
-        .then(res => console.log(res.data))
-        .catch(err => console.error(err));
-    },
+    ...mapActions(['testLogin']),
   },
 };
 </script>

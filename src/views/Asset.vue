@@ -27,7 +27,7 @@
           <v-card class="each-asset-box">
             <img src="../assets/img/bankbook.png" alt="">
             <div class="asset-name">
-              <h4>{{`${asset.acntName.slice(0,10)}...`}}</h4>
+              <h4>{{asset.acntName}}</h4>
               <span>{{asset.acntNo}}</span>
             </div>
             <div>
@@ -57,7 +57,7 @@
           <v-card class="each-asset-box">
             <img src="../assets/img/kard.png" alt="">
             <div class="asset-name">
-              <h4>{{`${asset.cardName.slice(0,10)}...`}}</h4>
+              <h4>{{asset.cardName}}</h4>
               <span>{{asset.cardNo}}</span>
             </div>
             <div>
@@ -72,6 +72,7 @@
         </div>
       </div>
     </div>
+
     <div v-else class="empty-asset">
       <h2>연동된 정보가 현재 존재하지 않습니다.</h2>
     </div>
@@ -79,10 +80,19 @@
       class="connection-btn"
       :class="{ 'hidden-btn': showBtn }"
       elevation="2"
-      @click="fetchData"
+      @click="clickFetchBtn"
+      large
     >
       계좌 정보 불러오기
     </v-btn>
+
+    <v-overlay :value="loading">
+      <v-progress-circular
+        indeterminate
+        color="primary"
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -105,6 +115,7 @@ export default {
       showBtn: false,
       lastScrollPosition: 0,
       fetchDate: '',
+      loading: false,
     };
   },
   computed: {
@@ -155,9 +166,15 @@ export default {
         this.showBtn = !this.showBtn;
       }
     },
+    clickFetchBtn() {
+      this.loading = true;
+      setTimeout(() => {
+        this.fetchData();
+        this.loading = false;
+      }, 2000);
+    },
     async fetchData() {
       try {
-        console.log('asd');
         const accountResponse = await this.$axios.get(api.fetchAllAccountListUrl);
         const cardResponse = await this.$axios.get(api.fetchAllCardListUrl);
 
@@ -223,7 +240,7 @@ export default {
 .travel-asset-box {
   width: 80vw;
   min-width: 300px;
-  margin: 1rem;
+  margin: 0.4rem 1rem 1rem 1rem;
   padding: 1.5rem;
 }
 
@@ -241,13 +258,13 @@ export default {
 }
 
 .info-script > span:nth-child(2) {
-  font-size: .5rem;
+  font-size: .6rem;
 
 }
 
 .each-asset-box {
   display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
+  grid-template-columns: 1fr 2.5fr 1fr;
   min-width: 300px;
   width: 80vw;
   padding: 1rem;
@@ -278,6 +295,7 @@ export default {
   bottom: 0;
   width: 80%;
   bottom: 10px;
+  font-weight: 600;
 }
 
 .hidden-btn {
@@ -333,8 +351,9 @@ export default {
 }
 
 .asset-name span {
-  font-size: 0.5rem;
+  font-size: 0.6rem;
   color: gray;
+  margin-top: 0.2rem;
 }
 
 .toggle-background.card-toggle {

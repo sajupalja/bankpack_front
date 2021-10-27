@@ -39,7 +39,7 @@
     >
       <div
         class="drawer-header"
-        v-if="!isLoggedIn"
+        v-if="!userName"
       >
         <router-link
           class="login-btn"
@@ -51,7 +51,7 @@
         class="drawer-header"
         v-else
       >
-        {{ username }}님
+        {{ userName }}님
       </div>
 
       <v-divider></v-divider>
@@ -79,12 +79,14 @@
 </template>
 
 <script>
+// eslint-disable-next-line object-curly-newline
+import { mapState } from 'vuex';
+
 export default {
   name: 'App',
   data() {
     return {
       drawer: false,
-      isLoggedIn: false,
       navigationItems: [
         {
           title: '홈', icon: 'mdi-home', route: 'Home',
@@ -98,8 +100,10 @@ export default {
           title: 'My 자산', icon: 'mdi-cash', route: 'Assets',
         },
       ],
-      username: '신채원',
     };
+  },
+  computed: {
+    ...mapState(['userName']),
   },
 };
 </script>

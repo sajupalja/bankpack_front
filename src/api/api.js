@@ -1,4 +1,7 @@
 export default {
+  // login
+  testLogin: '/user/users/1',
+
   // home
   fetchMyTripAsset: '/spending/account/budget?userId=1',
 

@@ -42,7 +42,7 @@
             <v-card class="review">
               <img :src="review.imgUrl" alt="" class="thumbnail-img">
               <div class="review-info">
-                <h4>{{`${review.trvlName.slice(0,16)}...`}}</h4>
+                <h4>{{`${review.trvlName.slice(0,10)}...`}}</h4>
                 <p>{{review.trvlEndDt.slice(0,10)}}</p>
                 <p>{{review.userName}}</p>
               </div>

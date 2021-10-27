@@ -14,6 +14,10 @@ export default {
   tripPaymentList: '/spending/travel/list/',
   tripPayment: '/spending/travel',
 
+  // my reviews
+  myReviewList: 'travel/reviews/',
+  myReview: 'travel/reviews/review-entry',
+
   // reviews
   fetchAllReviewsUrl: '/travel/reviews',
   searchReviewsUrl: '/travel/reviews/detail/',

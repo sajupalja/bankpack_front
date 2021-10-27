@@ -27,7 +27,7 @@
           <v-card class="each-asset-box">
             <img src="../assets/img/bankbook.png" alt="">
             <div class="asset-name">
-              <h4>{{asset.acntName}}</h4>
+              <h4>{{`${asset.acntName.slice(0,10)}...`}}</h4>
               <span>{{asset.acntNo}}</span>
             </div>
             <div>
@@ -57,7 +57,7 @@
           <v-card class="each-asset-box">
             <img src="../assets/img/kard.png" alt="">
             <div class="asset-name">
-              <h4>{{asset.cardName}}</h4>
+              <h4>{{`${asset.cardName.slice(0,10)}...`}}</h4>
               <span>{{asset.cardNo}}</span>
             </div>
             <div>
@@ -329,11 +329,11 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: .5rem;
+  font-size: .8rem;
 }
 
 .asset-name span {
-  font-size: .3rem;
+  font-size: 0.5rem;
   color: gray;
 }
 

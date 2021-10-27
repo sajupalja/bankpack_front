@@ -23,6 +23,7 @@
       </v-btn>
       <v-btn
         class="test-login-btn"
+        @click="testLogin"
         outlined
         block
       >
@@ -33,8 +34,17 @@
 </template>
 
 <script>
+import api from '../api/api.js';
+
 export default {
   name: 'Login',
+  methods: {
+    testLogin() {
+      this.$axios.get('/user/users/1')
+        .then(res => console.log(res.data))
+        .catch(err => console.error(err));
+    },
+  },
 };
 </script>
 

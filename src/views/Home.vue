@@ -113,7 +113,7 @@ export default {
   name: 'Home',
   data() {
     return {
-      travelBudget: null,
+      travelBudget: 0,
       tripItems: [],
       reviewItems: [],
     };

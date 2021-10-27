@@ -13,11 +13,11 @@
         class="budget-card"
         v-if="userName"
       >
-        <div class="budget-card-header">
+        <h3 class="budget-card-header">
           여행 예산
-        </div>
+        </h3>
         <div class="budget-card-body">
-          <span class="travel-budget">{{ travelBudget.toLocaleString({style:'currency'}) }}원</span>
+          <h1 class="travel-budget">{{ travelBudget.toLocaleString({style:'currency'}) }}원</h1>
           <span
             class="more-btn"
             @click="goToAssets"
@@ -113,7 +113,7 @@ export default {
   name: 'Home',
   data() {
     return {
-      travelBudget: '1,000,000,000',
+      travelBudget: null,
       tripItems: [],
       reviewItems: [],
     };
@@ -206,8 +206,6 @@ export default {
 }
 
 .budget-card-header {
-  font-weight: 600;
-  font-size: 1.4rem;
   padding-top: 1rem;
   padding-bottom: 1.8rem;
 }
@@ -219,7 +217,6 @@ export default {
 }
 
 .travel-budget {
-  font-size: 1.4rem;
   margin-bottom: 0.6rem;
 }
 

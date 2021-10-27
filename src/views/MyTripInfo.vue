@@ -46,7 +46,16 @@
             ></div>
             <v-divider class="timeline-card-divider"></v-divider>
             <div class="timeline-footer">
-              작성일: {{ review.writeDate | moment('YYYY년 MM월 DD일') }}
+              <span>작성일: {{ review.writeDate | moment('YYYY년 MM월 DD일') }}</span>
+              <v-btn
+                color="error"
+                class="review-delete-btn"
+                @click="deleteReview(review.trvlRevwId)"
+                icon
+                x-small
+              >
+                <v-icon>mdi-trash-can-outline</v-icon>
+              </v-btn>
             </div>
           </div>
         </v-timeline-item>
@@ -118,6 +127,15 @@
         </v-btn>
       </div>
     </div>
+
+    <v-overlay :value="loading">
+      <v-progress-circular
+        indeterminate
+        color="primary"
+        size="64"
+      ></v-progress-circular>
+      <h3 class="loading-msg">업로드 중</h3>
+    </v-overlay>
   </div>
 </template>
 
@@ -144,6 +162,7 @@ export default {
         trvlDt: null,
         imgUrl: null,
       },
+      loading: false,
     };
   },
   methods: {
@@ -162,6 +181,8 @@ export default {
       this.uploadedFileUrl = URL.createObjectURL(this.reviewImg);
     },
     createReview() {
+      console.log(this.reviewEntry);
+      this.loading = true;
       this.reviewEntry.trvlId = this.tripInfo.trvlId;
       this.reviewEntry.userId = 1;
       if (this.uploadedFileUrl) {
@@ -176,13 +197,23 @@ export default {
               })
               .then(() => {
                 this.$axios.post(api.myReview, this.reviewEntry)
-                  .then(() => this.fetchReviews())
+                  .then(() => {
+                    this.loading = false;
+                    this.fetchReviews();
+                    this.clearEditor();
+                    this.clearImg();
+                  })
                   .catch(err => console.error(err));
               });
           });
       } else {
         this.$axios.post(api.myReview, this.reviewEntry)
-          .then(() => this.fetchReviews())
+          .then(() => {
+            this.loading = false;
+            this.fetchReviews();
+            this.clearEditor();
+            this.clearImg();
+          })
           .catch(err => console.error(err));
       }
     },
@@ -194,6 +225,16 @@ export default {
     clearImg() {
       this.reviewImg = null;
       this.uploadedFileUrl = null;
+    },
+    clearEditor() {
+      this.reviewEntry.revwText = null;
+      this.reviewEntry.trvlDt = null;
+      this.reviewEntry.imgUrl = null;
+    },
+    deleteReview(id) {
+      this.$axios.delete(api.myReview + `/${id}`)
+        .then(() => this.fetchReviews())
+        .catch(err => console.error(err));
     },
   },
   mounted() {
@@ -258,6 +299,11 @@ export default {
   text-align: right;
 }
 
+.review-delete-btn {
+  margin-left: 0.4rem;
+  padding-bottom: 0.1rem;
+}
+
 .no-timeline {
   display: flex;
   justify-content: center;
@@ -279,6 +325,11 @@ export default {
 }
 
 .write-btn {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.loading-msg {
   margin-top: 1rem;
 }
 </style>

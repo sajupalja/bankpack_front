@@ -42,7 +42,7 @@
             <v-card class="review">
               <img :src="review.imgUrl" alt="" class="thumbnail-img">
               <div class="review-info">
-                <h5>{{review.trvlName}}</h5>
+                <h4>{{`${review.trvlName.slice(0,16)}...`}}</h4>
                 <p>{{review.trvlEndDt.slice(0,10)}}</p>
                 <p>{{review.userName}}</p>
               </div>
@@ -154,11 +154,15 @@ export default {
 
 .review-info > p {
   margin: 0;
+}
+
+.review-info > p:nth-child(2) {
   color: gray;
-  font-size: 0.25rem;
+  font-size: 0.6rem;
 }
 
 .review-info > p:nth-child(3) {
+  font-size: 0.8rem;
   color: black;
 }
 

@@ -6,35 +6,46 @@
         :src="recommendationItem.imgUrl"
         alt="header-image"
       >
+      <div class="trip-destination-overlay">
+        <h1 class="trip-destination">{{ recommendationItem.cntryName }} {{ recommendationItem.cityName }}</h1>
+      </div>
     </div>
+
     <div class="body-content">
-        <h3 id="recommend-title">
-        {{recommendationItem.cntryName}} {{recommendationItem.cityName}}
-        </h3>
-    <div class="spending-pie-chart-container">
-      <pie-chart
-        class="spending-pie-chart"
-        :chart-data="chartData"
-        :options="chartOptions"
-      ></pie-chart>
-    </div>
-    <h3 class="body-title">
-      <span>평균지출비용</span> <v-spacer></v-spacer><span>{{parseInt(recommendationItem.avgTotalPayAmt).toLocaleString({style:'currency'})}} 원</span>
-    </h3>
-    <v-treeview :items="treeviewItems" open-on-click>
-      <template  slot="label" slot-scope="props">
-        <div  style="display:flex">
-        {{props.item.name}}<v-spacer></v-spacer>{{props.item.label}}
-        </div>
-      </template>
-       </v-treeview>
-    <h4  class="body-title">
+      <h2>예상 지출 비용</h2>
+      <div class="spending-pie-chart-container">
+        <pie-chart
+          class="spending-pie-chart"
+          :chart-data="chartData"
+          :options="chartOptions"
+        ></pie-chart>
+      </div>
+      <h3 class="body-title">
+        <span>평균지출비용</span>
+        <v-spacer></v-spacer>
+        <span class="estimated-total-amt">{{parseInt(recommendationItem.avgTotalPayAmt).toLocaleString({style:'currency'})}} 원</span>
+      </h3>
+      <v-treeview
+        :items="treeviewItems"
+        open-on-click
+      >
+        <template
+          slot="label"
+          slot-scope="props"
+        >
+          <div style="display:flex">
+            {{ props.item.name }}<v-spacer></v-spacer>{{ props.item.label }}
+          </div>
+        </template>
+      </v-treeview>
+      <h4 class="body-title">
         {{recommendationItem.cntryName}} {{recommendationItem.cityName}}의 추천 후기
-    </h4>
-    <v-divider></v-divider>
-        <div
+      </h4>
+      <v-divider></v-divider>
+      <div
         v-for="item in recommendationItem.travels"
-        :key="item.trvlId">
+        :key="item.trvlId"
+      >
         <router-link
           class="router-link"
           :to="{ name: 'ReviewInfo', params:{ reviewId: item.trvlId} }"
@@ -45,7 +56,6 @@
             <div class="review-info">
               <h3>{{item.trvlName}}</h3>
               <p>{{item.trvlStartDt| moment('YYYY년 MM월 DD일') }} - {{item.trvlEndDt| moment('YYYY년 MM월 DD일') }}</p>
-              <!--<p>{{item.trvlEndDt| moment('YYYY년 MM월 DD일') }}</p>-->
             </div>
           </v-card>
         </router-link>
@@ -148,19 +158,27 @@ export default {
   width: 100%;
 }
 
-#recommend-title{
-    position: relative;
-    color: whitesmoke;
-    text-shadow:1px 1px 1px #000;
-    top: -4vh;
-    margin : 5px;
+.trip-destination-overlay {
+  position: relative;
+  top: -110px;
+  padding-top: 0.2rem;
+  padding-bottom: 1.4rem;
+  background: rgb(0,0,0);
+  background: linear-gradient(0deg, rgba(0,0,0,0.8) 30%, rgba(74,74,74,0.6) 77%, rgba(147,147,147,0.2) 99%);
 }
+
+.trip-destination {
+  margin-left: 1rem;
+  color: white;
+}
+
 .body-content {
   position: relative;
-  top: -5vh;
+  top: -50px;
   background-color: var(--background);
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
+  padding: 1.6rem;
 }
 
 .spending-pie-chart-container {
@@ -168,9 +186,14 @@ export default {
   width: 65vw;
 }
 
-.body-title{
+.body-title {
   display:flex;
-  margin:10px;
+  margin: 0.4rem 0;
+  align-items: baseline;
+}
+
+.estimated-total-amt {
+  font-size: 1.6rem;
 }
 
 .review {

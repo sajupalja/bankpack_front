@@ -24,7 +24,7 @@
 
     <div class="timeline-container">
       <v-timeline
-        v-if="reviewList !== null"
+        v-if="reviewList.length"
         dense
       >
         <v-timeline-item

@@ -209,7 +209,7 @@ export default {
   margin-right: 1rem;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   .smoke-screen {
     display: none;
   }

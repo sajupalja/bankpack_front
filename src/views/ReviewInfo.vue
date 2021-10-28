@@ -6,6 +6,13 @@
         :src="trvlInfo.imgUrl"
         alt="header-image"
       >
+      <v-btn
+        class="back-btn"
+        @click="goBack"
+        icon
+      >
+        <v-icon large color="font">mdi-chevron-left</v-icon>
+      </v-btn>
       <div class="trvl-title">
         <h1 class="trip-destination">{{ trvlInfo.cntryName }} {{ trvlInfo.cityName }}</h1>
       </div>
@@ -68,15 +75,6 @@
               <v-divider class="timeline-card-divider"></v-divider>
               <div class="timeline-footer">
                 <span>작성일: {{ review.writeDate | moment('YYYY년 MM월 DD일') }}</span>
-                <v-btn
-                  color="error"
-                  class="review-delete-btn"
-                  @click="deleteReview(review.trvlRevwId)"
-                  icon
-                  x-small
-                >
-                  <v-icon>mdi-trash-can-outline</v-icon>
-                </v-btn>
               </div>
             </div>
           </v-timeline-item>
@@ -106,7 +104,6 @@ export default {
   data () {
     return {
       trvlInfo: {},
-      rateInfo: {},
       chartOptions: {
         responsive: true,
         cutoutPercentage: 1,
@@ -120,25 +117,15 @@ export default {
         },
       },
       chartData: null,
-      trvlRevwItems: [
-        {
-          trvlRevwId: 1,
-          writeDate: '2021-10-22 13:00',
-          revwText: '파리에 도착해서 한 컷 찍었습니다~',
-          trvlDt: '2021-10-15 (금)',
-        }, {
-          trvlRevwId: 2,
-          writeDate: '2021-10-22 14:23',
-          revwText: '맛있는 저녁을 먹었습니다!',
-          trvlDt: '2021-10-16 (토)',
-        },
-      ],
     };
   },
   mounted () {
     this.fetchData();
   },
   methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
     async fetchData() {
       const reviewId = this.$route.params.reviewId;
       const res = await this.$axios.get(api.fetchReviewUrl + reviewId);
@@ -222,6 +209,12 @@ export default {
   object-fit: cover;
   height: 100%;
   width: 100%;
+}
+
+.back-btn {
+  position: absolute;
+  top: 9vh;
+  left: 0.2rem;
 }
 
 .trvl-title {
@@ -339,11 +332,6 @@ export default {
 .timeline-footer {
   font-size: 0.8rem;
   text-align: right;
-}
-
-.review-delete-btn {
-  margin-left: 0.4rem;
-  padding-bottom: 0.1rem;
 }
 
 .no-timeline {

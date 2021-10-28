@@ -216,7 +216,7 @@ export default {
           .then(res => {
             this.tripInfo = res.data;
             this.$router.push({
-              name: 'MyTripDetail', params: {
+              name: 'MyTripInfo', params: {
                 trvlId: this.tripInfo.trvlId,
               },
             });
@@ -229,7 +229,7 @@ export default {
           .then(res => {
             this.tripInfo = res.data;
             this.$router.push({
-              name: 'MyTripDetail', params: {
+              name: 'MyTripInfo', params: {
                 trvlId: this.tripInfo.trvlId,
               },
             });

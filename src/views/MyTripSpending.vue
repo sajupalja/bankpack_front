@@ -2,7 +2,7 @@
   <div class="my-trip-spending">
     <div class="spending-progress-container">
       <div class="current-spending-title">현재 지출</div>
-      <div class="current-spending-amount">{{ tripInfo.totalPayAmt.toLocaleString({style:'currency'}) }}원 <span class="total-budget-amount">/ {{ tripInfo.budgetAmt.toLocaleString({style:'currency'}) }}원</span></div>
+      <div class="current-spending-amount">{{ currency(tripInfo.totalPayAmt) }}원 <span class="total-budget-amount">/ {{ currency(tripInfo.budgetAmt) }}원</span></div>
       <v-progress-linear
         class="spending-progress-bar"
         :value="spendingPercentage"
@@ -50,7 +50,7 @@
         </div>
         <div class="payment-history-amount">
           <span class="payment-history-method">{{ getPayMethod(item.payMethod) }}</span>
-          <span class="payment-history-amount">{{ item.payAmt.toLocaleString({style:'currency'}) }}</span>
+          <span class="payment-history-amount">{{ currency(item.payAmt) }}</span>
         </div>
       </div>
     </div>
@@ -246,7 +246,7 @@ export default {
   components: {
     PieChart,
   },
-  props: ['tripInfo'],
+  props: ['tripInfo', 'chartData'],
   data() {
     return {
       chartOptions: {
@@ -258,17 +258,6 @@ export default {
             fontFamily: 'paybooc-Medium',
           },
         },
-      },
-      chartData: {
-        hoverBorderWidth: 10,
-        labels: ['식비', '숙박비', '교통비', '활동', '기타'],
-        datasets: [
-          {
-            label: '카테고리별 지출',
-            backgroundColor: ['#2878A0', '#FAF8D4', '#BBDDFF', '#EF8354', '#242038'],
-            data: [this.tripInfo.totalFoodRate, this.tripInfo.totalRoomRate, this.tripInfo.totalTrffRate, this.tripInfo.totalActRate, this.tripInfo.totalEtcRate],
-          },
-        ],
       },
       paymentHistoryFilters: [
         {
@@ -358,6 +347,10 @@ export default {
     },
   },
   methods: {
+    currency(amt) {
+      // eslint-disable-next-line object-curly-newline
+      return amt.toLocaleString({style:'currency'});
+    },
     paymentIcon(payType) {
       if (payType === 1) {
         return 'mdi-bed-empty';
@@ -386,7 +379,7 @@ export default {
       newFilter.classList.add('active-filter');
     },
     fetchPaymentList() {
-      this.$axios.get(api.tripPaymentList + this.tripInfo.trvlId)
+      this.$axios.get(api.tripPaymentList + this.$route.params.trvlId)
         .then(res => this.paymentHistoryItem = res.data)
         .catch(err => console.error(err));
     },
@@ -406,6 +399,7 @@ export default {
       if (this.paymentDialogMode === 'edit') {
         this.$axios.put(api.tripPayment, this.paymentInfo)
           .then(() => {
+            this.$emit('fetch');
             this.closePaymentDialog();
             this.fetchPaymentList();
           })
@@ -413,9 +407,9 @@ export default {
       } else {
         this.$axios.post(api.tripPayment, this.paymentInfo)
           .then(() => {
+            this.$emit('fetch');
             this.closePaymentDialog();
             this.fetchPaymentList();
-            this.$emit('fetch');
           })
           .catch(err => console.error(err));
       }
@@ -423,9 +417,9 @@ export default {
     deletePayment(id) {
       this.$axios.delete(api.tripPayment + `/${id}`)
         .then(() => {
+          this.$emit('fetch');
           this.closePaymentDialog();
           this.fetchPaymentList();
-          this.$emit('fetch');
         })
         .catch(err => console.error(err));
     },

@@ -36,7 +36,7 @@
           >지출 관리</router-link>
         </v-tab>
       </v-tabs>
-      <router-view :trip-info="tripInfo"></router-view>
+      <router-view :trip-info="tripInfo" @fetch="fetchTripInfo"></router-view>
     </div>
   </div>
 </template>

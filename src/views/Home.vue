@@ -6,6 +6,20 @@
         src="../assets/img/main_ad.gif"
         alt="ad_image"
       >
+      <!-- <v-carousel
+        class="ad_carousel"
+        cycle
+        hide-delimiter-background
+        show-arrows-on-hover
+      >
+        <v-carousel-item
+          class="ad_img"
+          v-for="(slide, i) in slides"
+          :key="i"
+          :src="slide"
+        >
+        </v-carousel-item>
+      </v-carousel> -->
     </div>
 
     <v-container class="home-body">
@@ -116,6 +130,7 @@ export default {
       travelBudget: 0,
       tripItems: [],
       reviewItems: [],
+      slides: ['../assets/img/main_ad.gif', '../assets/img/main_ad2.jpeg'],
     };
   },
   computed: {
@@ -124,7 +139,7 @@ export default {
   methods: {
     goToTrip(trvlId) {
       // eslint-disable-next-line object-curly-newline
-      this.$router.push({ name: 'MyTripDetail', params: { trvlId: trvlId } });
+      this.$router.push({ name: 'MyTripInfo', params: { trvlId: trvlId } });
     },
     goToAssets() {
       // eslint-disable-next-line object-curly-newline
@@ -322,8 +337,6 @@ export default {
 
 .review-footer {
   margin-top: 0.4rem;
-  display: flex;
-  justify-content: space-between;
 }
 
 .review-footer > p {
@@ -331,6 +344,7 @@ export default {
 }
 
 .review-footer > p:nth-child(2) {
+  margin-top: 0.4rem;
   color: gray;
   font-size: 0.8rem;
 }

@@ -132,6 +132,26 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const publicPages = ['Login', 'Home', 'ReviewList'];
+  const authPages = ['Login'];
+
+  const authRequired = !publicPages.includes(to.name);
+  const unauthRequired = authPages.includes(to.name);
+  const isLoggedIn = sessionStorage.getItem('userName');
+
+  // 로그인 이미했는데 로그인 페이지 가려는 경우
+  if (unauthRequired && isLoggedIn) {
+    // eslint-disable-next-line object-curly-newline
+    next({ name: 'Home' });
+  }
+
+  // 로그인 안했는데 로그인 필요한 페이지 가려는 경우
+  if (authRequired && !isLoggedIn) {
+    alert('로그인해주세요.');
+    // eslint-disable-next-line object-curly-newline
+    next({ name: 'Login' });
+  }
+
   document.title = to.meta.title || 'BANKPACK';
   next();
 });

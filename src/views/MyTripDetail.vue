@@ -6,6 +6,13 @@
         :src="tripInfo.imgUrl"
         alt="header-image"
       >
+      <v-btn
+        class="back-btn"
+        @click="goBack"
+        icon
+      >
+        <v-icon large color="font">mdi-chevron-left</v-icon>
+      </v-btn>
       <div class="trip-destination-overlay">
         <h1 class="trip-destination">{{ tripInfo.cntryName }} {{ tripInfo.cityName }}</h1>
       </div>
@@ -36,7 +43,7 @@
           >지출 관리</router-link>
         </v-tab>
       </v-tabs>
-      <router-view :trip-info="tripInfo" @fetch="fetchTripInfo"></router-view>
+      <router-view :trip-info="tripInfo" :chart-data="chartData" @fetch="fetchTripInfo"></router-view>
     </div>
   </div>
 </template>
@@ -48,15 +55,30 @@ export default {
   name: 'MyTripDetail',
   data() {
     return {
-      tab: 0,
+      tab: this.$route.name === 'MyTripInfo' ? 0 : 1,
       tripInfo: [],
+      chartData: null,
     };
   },
   methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
     fetchTripInfo() {
       this.$axios.get(api.myTripDetail + this.$route.params.trvlId)
         .then(res => {
           console.log(res.data);
+          this.chartData = {
+            hoverBorderWidth: 10,
+            labels: ['식비', '숙박비', '교통비', '활동', '기타'],
+            datasets: [
+              {
+                label: '카테고리별 지출',
+                backgroundColor: ['#2878A0', '#FAF8D4', '#BBDDFF', '#EF8354', '#242038'],
+                data: [res.data.totalFoodRate, res.data.totalRoomRate, res.data.totalTrffRate, res.data.totalActRate, res.data.totalEtcRate],
+              },
+            ],
+          };
           this.tripInfo = res.data;
         })
         .catch(err => console.error(err));
@@ -81,6 +103,12 @@ export default {
   object-fit: cover;
   height: 100%;
   width: 100%;
+}
+
+.back-btn {
+  position: absolute;
+  top: 9vh;
+  left: 0.2rem;
 }
 
 .trip-destination-overlay {

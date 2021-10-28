@@ -182,39 +182,43 @@ export default {
     },
     createReview() {
       console.log(this.reviewEntry);
-      this.loading = true;
-      this.reviewEntry.trvlId = this.tripInfo.trvlId;
-      this.reviewEntry.userId = 1;
-      if (this.uploadedFileUrl) {
-        const date = new Date();
-        const id = date.getTime();
-        const storageRef = firebase.storage().ref();
-        storageRef.child(`user${this.tripInfo.userId}`).child(`trip${this.tripInfo.trvlId}`).child(`${id}_${this.reviewImg.name}`).put(this.reviewImg)
-          .then(() => {
-            storageRef.child(`user${this.tripInfo.userId}`).child(`trip${this.tripInfo.trvlId}`).child(`${id}_${this.reviewImg.name}`).getDownloadURL()
-              .then(url => {
-                this.reviewEntry.imgUrl = url;
-              })
-              .then(() => {
-                this.$axios.post(api.myReview, this.reviewEntry)
-                  .then(() => {
-                    this.loading = false;
-                    this.fetchReviews();
-                    this.clearEditor();
-                    this.clearImg();
-                  })
-                  .catch(err => console.error(err));
-              });
-          });
+      if (this.reviewEntry.trvlDt === null) {
+        alert('날짜를 입력해주세요');
       } else {
-        this.$axios.post(api.myReview, this.reviewEntry)
-          .then(() => {
-            this.loading = false;
-            this.fetchReviews();
-            this.clearEditor();
-            this.clearImg();
-          })
-          .catch(err => console.error(err));
+        this.loading = true;
+        this.reviewEntry.trvlId = this.tripInfo.trvlId;
+        this.reviewEntry.userId = 1;
+        if (this.uploadedFileUrl) {
+          const date = new Date();
+          const id = date.getTime();
+          const storageRef = firebase.storage().ref();
+          storageRef.child(`user${this.tripInfo.userId}`).child(`trip${this.tripInfo.trvlId}`).child(`${id}_${this.reviewImg.name}`).put(this.reviewImg)
+            .then(() => {
+              storageRef.child(`user${this.tripInfo.userId}`).child(`trip${this.tripInfo.trvlId}`).child(`${id}_${this.reviewImg.name}`).getDownloadURL()
+                .then(url => {
+                  this.reviewEntry.imgUrl = url;
+                })
+                .then(() => {
+                  this.$axios.post(api.myReview, this.reviewEntry)
+                    .then(() => {
+                      this.loading = false;
+                      this.fetchReviews();
+                      this.clearEditor();
+                      this.clearImg();
+                    })
+                    .catch(err => console.error(err));
+                });
+            });
+        } else {
+          this.$axios.post(api.myReview, this.reviewEntry)
+            .then(() => {
+              this.loading = false;
+              this.fetchReviews();
+              this.clearEditor();
+              this.clearImg();
+            })
+            .catch(err => console.error(err));
+        }
       }
     },
     fetchReviews() {

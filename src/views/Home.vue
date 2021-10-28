@@ -1,25 +1,23 @@
 <template>
   <div class="home">
     <div class="home-header">
-      <img
-        class="ad-img"
-        src="../assets/img/main_ad.gif"
-        alt="ad_image"
-      >
-      <!-- <v-carousel
+      <v-carousel
         class="ad_carousel"
         cycle
-        hide-delimiter-background
-        show-arrows-on-hover
+        hide-delimiters
       >
         <v-carousel-item
           class="ad_img"
-          v-for="(slide, i) in slides"
-          :key="i"
-          :src="slide"
+          v-for="slide in slides"
+          :key="slide.id"
         >
+          <img
+            class="ad-img"
+            :src="slide.src"
+            alt="ad_image"
+          >
         </v-carousel-item>
-      </v-carousel> -->
+      </v-carousel>
     </div>
 
     <v-container class="home-body">
@@ -31,7 +29,7 @@
           여행 예산
         </h3>
         <div class="budget-card-body">
-          <h1 class="travel-budget">{{ travelBudget.toLocaleString({style:'currency'}) }}원</h1>
+          <h1 class="travel-budget">{{ travelBudget.toLocaleString({style:'currency'}) }} 원</h1>
           <span
             class="more-btn"
             @click="goToAssets"
@@ -41,7 +39,7 @@
 
       <v-btn
         class="recommend-btn"
-        @click="goToSurvey"
+        :to="{ name: 'Survey' }"
         block
         x-large
       >
@@ -130,7 +128,24 @@ export default {
       travelBudget: 0,
       tripItems: [],
       reviewItems: [],
-      slides: ['../assets/img/main_ad.gif', '../assets/img/main_ad2.jpeg'],
+      slides: [
+        {
+          id: 1,
+          src: require('@/assets/img/main_ad.gif'),
+        }, {
+          id: 2,
+          src: require('@/assets/img/main_ad2.jpeg'),
+        }, {
+          id: 3,
+          src: require('@/assets/img/main_ad3.png'),
+        }, {
+          id: 4,
+          src: require('@/assets/img/main_ad4.png'),
+        }, {
+          id: 5,
+          src: require('@/assets/img/main_ad5.png'),
+        },
+      ],
     };
   },
   computed: {
@@ -148,15 +163,6 @@ export default {
     goToMyTrip() {
       // eslint-disable-next-line object-curly-newline
       this.$router.push({ name: 'MyTripList' });
-    },
-    goToSurvey() {
-      if (this.userName) {
-        // eslint-disable-next-line object-curly-newline
-        this.$router.push({ name: 'Survey' });
-      } else {
-        // eslint-disable-next-line object-curly-newline
-        this.$router.push({ name: 'Login' });
-      }
     },
     fetchRecentTrips() {
       this.$axios.get(api.myTripList)
@@ -190,7 +196,9 @@ export default {
   mounted() {
     if (this.userName) {
       this.fetchRecentTrips();
-      this.fetchMyTripAsset();
+      if (localStorage.getItem('asset-info')) {
+        this.fetchMyTripAsset();
+      }
     } else {
       this.fetchReviewData();
     }
@@ -206,6 +214,11 @@ export default {
 
 .home-header {
   background-color: var(--background);
+}
+
+.ad_carousel {
+  width: 100%;
+  height: 230px !important;
 }
 
 .ad-img {

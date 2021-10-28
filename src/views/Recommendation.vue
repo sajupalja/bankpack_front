@@ -26,7 +26,7 @@
                 class="recommendation-item-btn"
                 color="primary"
                 outlined
-                :to="{name: 'MyTripUpdate', params: { surveyResult: surveyResult ,cityId: item.cityId, cntryId:item.cntryId, clstrLabel:item.clstrLabel, }}"
+                :to="{name: 'MyTripUpdate', params: { surveyResult: surveyResult ,cityId: item.cityId, cntryId:item.cntryId, clstrLabel:item.clstrLabel,imgUrl:item.imgUrl }}"
               >
                 추가
               </v-btn>

@@ -244,6 +244,7 @@ export default {
       this.sendingMyTripInfo.cityId = this.$route.params.cityId;
       this.sendingMyTripInfo.cntryId = this.$route.params.cntryId;
       this.sendingMyTripInfo.clstrLabel = this.$route.params.clstrLabel;
+      this.sendingMyTripInfo.imgUrl = this.$route.params.imgUrl;
     }
     if (this.sendingMyTripInfo.cityId == undefined){
       this.$router.go(-1);

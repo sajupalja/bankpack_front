@@ -6,6 +6,13 @@
         :src="recommendationItem.imgUrl"
         alt="header-image"
       >
+      <v-btn
+        class="back-btn"
+        @click="goBack"
+        icon
+      >
+        <v-icon large color="font">mdi-chevron-left</v-icon>
+      </v-btn>
       <div class="trip-destination-overlay">
         <h1 class="trip-destination">{{ recommendationItem.cntryName }} {{ recommendationItem.cityName }}</h1>
       </div>
@@ -82,17 +89,7 @@ export default {
     return {
       recommendationItem:{},
       avgSpending:10000,
-      chartData: {
-        hoverBorderWidth: 10,
-        labels: ['식비', '숙박비', '교통비', '활동', '기타'],
-        datasets: [
-          {
-            label: '카테고리별 지출',
-            backgroundColor: ['#2878A0', '#FAF8D4', '#BBDDFF', '#EF8354', '#242038'],
-            data: [0.1, 0.2, 0.3, 0.3, 0.1],
-          },
-        ],
-      },
+      chartData: null,
       chartOptions: {
         cutoutPercentage: 0,
         legend: {
@@ -106,9 +103,7 @@ export default {
       treeviewItems:[{
         id: 1,
         name:'카테고리별 평균지출 금액',
-        children: [
-
-        ],
+        children: [],
       }],
 
     };
@@ -117,6 +112,9 @@ export default {
     getCurrency(value) {
       // eslint-disable-next-line object-curly-newline
       return value.toLocaleString({style:'currency'});
+    },
+    goBack() {
+      this.$router.go(-1);
     },
     fetchRecommendationDetail() {
       this.$axios.post(api.recommendationDetail, {
@@ -128,7 +126,17 @@ export default {
           console.log(res.data);
           this.recommendationItem = res.data;
           // ['식비', '숙박비', '교통비', '활동', '기타']
-          this.chartData.datasets[0].data = [this.recommendationItem.avgFoodRate, this.recommendationItem.avgRoomRate, this.recommendationItem.avgTrffRate, this.recommendationItem.avgActRate, this.recommendationItem.avgEtcRate ];
+          this.chartData = {
+            hoverBorderWidth: 10,
+            labels: ['식비', '숙박비', '교통비', '활동', '기타'],
+            datasets: [
+              {
+                label: '카테고리별 지출',
+                backgroundColor: ['#2878A0', '#FAF8D4', '#BBDDFF', '#EF8354', '#242038'],
+                data: [res.data.avgFoodRate, res.data.avgRoomRate, res.data.avgTrffRate, res.data.avgActRate, res.data.avgEtcRate],
+              },
+            ],
+          };
           this.treeviewItems[0].children = [
             {
               id: 2, icon: 'mdi-food-drumstick', name: '식비', label: this.getCurrency(this.recommendationItem.avgFoodAmt) + ' 원',
@@ -165,6 +173,12 @@ export default {
   object-fit: cover;
   height: 100%;
   width: 100%;
+}
+
+.back-btn {
+  position: absolute;
+  top: 9vh;
+  left: 0.2rem;
 }
 
 .trip-destination-overlay {

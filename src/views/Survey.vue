@@ -219,6 +219,7 @@ export default {
       var field = this.$refs.budgetAmt_form;
       switch (this.e6){
       case 1:
+        // eslint-disable-next-line object-curly-newline
         this.surveyResult.budgetAmt = val;
         break;
       case 2:

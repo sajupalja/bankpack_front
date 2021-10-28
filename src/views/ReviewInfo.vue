@@ -7,19 +7,23 @@
         alt="header-image"
       >
       <div class="trvl-title">
-        <h1 class="title">{{ trvlInfo.trvlName }}</h1>
+        <h1 class="trip-destination">{{ trvlInfo.cntryName }} {{ trvlInfo.cityName }}</h1>
       </div>
     </div>
+
     <div class="body">
+      <div class="trip-name">
+        <h2>{{ trvlInfo.trvlName }}</h2>
+      </div>
       <div class="review-write-info">
         <p>작성자: {{ trvlInfo.userName }}</p>
       </div>
 
       <div class="review-info-card">
-        <div class="trip-start-date" v-if="trvlInfo.trvlStartDt">여행 시작일: {{ trvlInfo.trvlStartDt | moment('YYYY-MM-DD HH:MM') }}</div>
-        <div class="trip-end-date" v-if="trvlInfo.trvlStartDt">여행 종료일: {{ trvlInfo.trvlEndDt | moment('YYYY-MM-DD HH:MM') }}</div>
-        <div class="trip-ppl-cnt">여행 인원: {{ trvlInfo.cmpnCnt }}</div>
-        <div class="trip-type">여행 유형: {{ getTripType(trvlInfo.cmpnType) }}</div>
+        <div class="trip-start-date" v-if="trvlInfo.trvlStartDt"><span class="trip-info-item">여행 시작일:</span> {{ trvlInfo.trvlStartDt | moment('YYYY년 MM월 DD일') }}</div>
+        <div class="trip-end-date" v-if="trvlInfo.trvlStartDt"><span class="trip-info-item">여행 종료일:</span> {{ trvlInfo.trvlEndDt | moment('YYYY년 MM월 DD일') }}</div>
+        <div class="trip-ppl-cnt"><span class="trip-info-item">여행 종료일:</span> {{ trvlInfo.cmpnCnt }}</div>
+        <div class="trip-type"><span class="trip-info-item">여행 유형:</span> {{ getTripType(trvlInfo.cmpnType) }}</div>
       </div>
 
       <div class="review-chart">
@@ -41,25 +45,49 @@
 
       <div class="timeline-container">
         <v-timeline
+          v-if="trvlInfo.trvVO.length"
           dense
         >
           <v-timeline-item
-            v-for="review in trvlRevwItems"
+            class="timeline-item"
+            v-for="review in trvlInfo.trvVO"
             :key="review.trvlRevwId"
             small
           >
-            <span class="timeline-date">{{ review.trvlDt }}</span>
+            <span class="timeline-date">{{ review.trvlDt | moment('YYYY년 MM월 DD일') }}</span>
             <div class="timeline-card">
-              <div class="timeline-content">
-                {{ review.revwText }}
-              </div>
+              <v-img
+                v-if="review.imgUrl"
+                class="review-img"
+                :src="review.imgUrl"
+              ></v-img>
+              <div
+                class="timeline-content"
+                v-html="review.revwText"
+              ></div>
               <v-divider class="timeline-card-divider"></v-divider>
               <div class="timeline-footer">
-                작성일: {{ review.writeDate }}
+                <span>작성일: {{ review.writeDate | moment('YYYY년 MM월 DD일') }}</span>
+                <v-btn
+                  color="error"
+                  class="review-delete-btn"
+                  @click="deleteReview(review.trvlRevwId)"
+                  icon
+                  x-small
+                >
+                  <v-icon>mdi-trash-can-outline</v-icon>
+                </v-btn>
               </div>
             </div>
           </v-timeline-item>
         </v-timeline>
+
+        <div
+          class="no-timeline"
+          v-else
+        >
+          <h3>여행 후기가 없네요!</h3>
+        </div>
       </div>
 
     </div>
@@ -117,6 +145,8 @@ export default {
       const reviewDetailData = res.data;
       console.log(reviewDetailData);
       const {
+        cntryName,
+        cityName,
         trvlName,
         trvlStartDt,
         trvlEndDt,
@@ -130,9 +160,12 @@ export default {
         totalRoomRate,
         totalTrffRate,
         imgUrl,
+        trvVO,
       } = reviewDetailData;
 
       const trvlInfo = {
+        cntryName,
+        cityName,
         trvlName,
         trvlStartDt,
         trvlEndDt,
@@ -141,6 +174,7 @@ export default {
         userName,
         totalPayAmt,
         imgUrl,
+        trvVO,
       };
 
       const rateList = [totalFoodRate, totalRoomRate, totalTrffRate, totalActRate, totalEtcRate];
@@ -199,6 +233,11 @@ export default {
   background: linear-gradient(0deg, rgba(0,0,0,0.8) 30%, rgba(74,74,74,0.6) 77%, rgba(147,147,147,0.2) 99%);
 }
 
+.trip-destination {
+  margin-left: 1rem;
+  color: white;
+}
+
 .title {
   margin-left: 1rem;
   color: white;
@@ -212,6 +251,10 @@ export default {
   border-top-left-radius: 25px;
   padding: 1.6rem 1rem 1rem 1rem;
   height: 100%;
+}
+
+.trip-name {
+  text-align: center;
 }
 
 .title > h5 {
@@ -235,6 +278,10 @@ export default {
   background-color: white;
   box-shadow: var(--box-shadow);
   border-radius: var(--card-border-radius);
+}
+
+.trip-info-item {
+  font-weight: 600;
 }
 
 .review-expense-info {
@@ -274,11 +321,15 @@ export default {
 }
 
 .timeline-card {
+  margin-left: 0.6rem;
   padding: 1rem 0.8rem 0.4rem 0.8rem;
   background-color: white;
   box-shadow: var(--box-shadow);
   border-radius: var(--card-border-radius);
-  margin-left: 0.6rem;
+}
+
+.review-img {
+  margin-bottom: 0.6rem;
 }
 
 .timeline-card-divider {
@@ -288,5 +339,18 @@ export default {
 .timeline-footer {
   font-size: 0.8rem;
   text-align: right;
+}
+
+.review-delete-btn {
+  margin-left: 0.4rem;
+  padding-bottom: 0.1rem;
+}
+
+.no-timeline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  padding-top: 0.8rem;
 }
 </style>

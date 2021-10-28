@@ -415,6 +415,7 @@ export default {
           .then(() => {
             this.closePaymentDialog();
             this.fetchPaymentList();
+            this.$emit('fetch');
           })
           .catch(err => console.error(err));
       }
@@ -424,6 +425,7 @@ export default {
         .then(() => {
           this.closePaymentDialog();
           this.fetchPaymentList();
+          this.$emit('fetch');
         })
         .catch(err => console.error(err));
     },
@@ -489,7 +491,8 @@ export default {
 }
 
 .filter-btn {
-  margin: 0 0.4rem;
+  margin: 0 0.3rem;
+  font-size: 0.9rem;
 }
 
 .filter-btn:hover {

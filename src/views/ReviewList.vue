@@ -40,11 +40,11 @@
             :to="{ name: 'ReviewInfo', params:{ reviewId: review.trvlId } }"
           >
             <v-card class="review">
-              <img
+              <v-img
                 :src="review.imgUrl"
                 alt="thumbnail-img"
                 class="thumbnail-img"
-              >
+              ></v-img>
               <div class="review-info">
                 <h4 class="review-title">{{ review.trvlName.length > 17 ? review.trvlName.slice(0, 17) + '...' : review.trvlName }}</h4>
                 <div class="review-footer">
@@ -161,8 +161,6 @@ export default {
 
 .review-footer {
   margin-top: 0.4rem;
-  display: flex;
-  justify-content: space-between;
 }
 
 .review-footer > p {
@@ -170,6 +168,7 @@ export default {
 }
 
 .review-footer > p:nth-child(2) {
+  margin-top: 0.4rem;
   color: gray;
   font-size: 0.8rem;
 }

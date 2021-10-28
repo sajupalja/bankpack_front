@@ -93,7 +93,7 @@
                 <h4 class="review-title">{{ review.trvlName.length > 17 ? review.trvlName.slice(0, 17) + '...' : review.trvlName }}</h4>
                 <div class="review-footer">
                   <p>{{review.userName}}</p>
-                  <p><v-icon class="calendar-icon" x-small>mdi-calendar</v-icon> {{ review.trvlStartDt.slice(0,10) }} ~ {{review.trvlEndDt.slice(0,10)}}</p>
+                  <p><v-icon class="calendar-icon" x-small>mdi-calendar</v-icon> {{ review.trvlStartDt | moment('YYYY.MM.DD') }} ~ {{review.trvlEndDt | moment('YYYY.MM.DD')}}</p>
                 </div>
               </div>
             </v-card>

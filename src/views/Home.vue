@@ -137,10 +137,10 @@ export default {
           src: require('@/assets/img/main_ad3.png'),
         }, {
           id: 3,
-          src: require('@/assets/img/main_ad2.png'),
+          src: require('@/assets/img/main_ad6.png'),
         }, {
           id: 4,
-          src: require('@/assets/img/main_ad4.png'),
+          src: require('@/assets/img/main_ad7.png'),
         }, {
           id: 5,
           src: require('@/assets/img/main_ad5.png'),

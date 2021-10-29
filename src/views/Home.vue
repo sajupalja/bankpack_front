@@ -134,13 +134,13 @@ export default {
           src: require('@/assets/img/main_ad.gif'),
         }, {
           id: 2,
-          src: require('@/assets/img/main_ad2.jpeg'),
-        }, {
-          id: 3,
           src: require('@/assets/img/main_ad3.png'),
         }, {
+          id: 3,
+          src: require('@/assets/img/main_ad6.png'),
+        }, {
           id: 4,
-          src: require('@/assets/img/main_ad4.png'),
+          src: require('@/assets/img/main_ad7.png'),
         }, {
           id: 5,
           src: require('@/assets/img/main_ad5.png'),
@@ -218,7 +218,7 @@ export default {
 
 .ad_carousel {
   width: 100%;
-  height: 230px !important;
+  height: 200px !important;
 }
 
 .ad-img {
